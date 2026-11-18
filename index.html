@@ -290,6 +290,139 @@ dialog h3{margin:0 0 10px;font-size:15px}
 .toast.ok{background:var(--ok)}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+/* ---------- Game Test Mode (เพิ่มใหม่ — ไม่กระทบระบบเดิม) ---------- */
+#btnGameTest{font-weight:700}
+#gtOverlay{position:fixed;inset:0;z-index:300;background:var(--bg);display:none;flex-direction:column}
+#gtOverlay.open{display:flex}
+#gtOverlay:fullscreen{background:var(--bg)}
+#gtHead{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--panel);
+  border-bottom:1px solid var(--line);flex:none;flex-wrap:wrap}
+#gtHead .gt-title{font-weight:700;font-size:14px;white-space:nowrap}
+#gtProjLabel{color:var(--muted);font-size:11px}
+#gtMain{flex:1;display:flex;min-height:0}
+#gtStageCol{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--stage)}
+#gtCanvasWrap{flex:1;position:relative;overflow:hidden;min-height:120px}
+#gtCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+#gtCanvas[data-tool="pan"]{cursor:grab}
+#gtCanvas[data-tool="add"]{cursor:cell}
+#gtCanvas[data-tool="del"]{cursor:not-allowed}
+#gtHud{position:absolute;top:6px;left:6px;background:var(--hud);border:1px solid var(--line-2);
+  border-radius:6px;padding:4px 8px;font-size:11px;font-family:var(--mono);pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);max-width:calc(100% - 12px)}
+#gtStatus{flex:none;padding:4px 10px;font-size:12px;color:var(--muted);background:var(--panel);
+  border-top:1px solid var(--line);min-height:24px}
+#gtStatus b{color:var(--ink)}
+#gtCtrl{flex:none;display:flex;align-items:center;justify-content:center;gap:20px;padding:8px 10px;
+  background:var(--panel);border-top:1px solid var(--line);flex-wrap:wrap}
+.gtdpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:4px}
+.gtbtn{user-select:none;-webkit-user-select:none;touch-action:none;display:flex;align-items:center;
+  justify-content:center;font-size:18px;font-weight:700;background:var(--panel-2);
+  border:1px solid var(--line-2);border-radius:8px;cursor:pointer;padding:0}
+.gtbtn:hover{border-color:var(--accent)}
+.gtbtn.on,.gtbtn:active{background:var(--accent);border-color:var(--accent);color:#fff}
+.gtround{width:70px;height:70px;border-radius:50%;font-size:24px}
+#gtSide{width:340px;flex:none;background:var(--panel);border-left:1px solid var(--line);
+  overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:8px}
+#gtSide details{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;flex:none}
+#gtSide summary{cursor:pointer;font-weight:700;padding:7px 10px;list-style:none;display:flex;
+  align-items:center;gap:6px;user-select:none}
+#gtSide summary::before{content:"▸";font-size:10px;color:var(--muted);transition:transform .12s}
+#gtSide details[open] summary::before{transform:rotate(90deg)}
+#gtSide summary:hover{color:var(--accent)}
+#gtPresets{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px}
+#gtPresets .row{gap:4px}
+#gtPresets button{padding:4px 8px;font-size:11.5px}
+.gt-info{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12px;align-items:baseline}
+.gt-info dt{color:var(--muted);white-space:nowrap}
+.gt-info dd{margin:0;font-family:var(--mono);word-break:break-word}
+.gt-legend{font-size:11px;color:var(--muted);line-height:1.7}
+.gt-legend i{display:inline-block;width:10px;height:10px;border:1.5px solid;margin-right:4px;vertical-align:-1px}
+#gtResumeChip{position:fixed;bottom:16px;left:16px;z-index:260;display:none;font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,.3);background:var(--accent);border-color:var(--accent);color:#fff}
+#gtResumeChip:hover{color:#fff;filter:brightness(1.08)}
+.gt-note{font-size:11px;background:var(--accent-soft);border:1px solid var(--accent);
+  border-radius:5px;padding:5px 8px;color:var(--ink)}
+@media (max-width:880px){
+  #gtMain{flex-direction:column;overflow-y:auto}
+  #gtSide{width:100%;border-left:none;border-top:1px solid var(--line);flex:none;max-height:none}
+  #gtCanvasWrap{min-height:220px}
+  .gtdpad{grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px)}
+  .gtround{width:60px;height:60px}
+}
+@media (pointer:coarse){
+  .gtbtn{min-width:44px;min-height:44px}
+  .gtdpad{grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px)}
+  .gtround{width:76px;height:76px}
+}
+
+/* ---------- Animation Mapping (เพิ่มใหม่ — ไม่กระทบระบบเดิม) ---------- */
+.hide{display:none !important}
+/* ---- Crop & Rotate tool ---- */
+#canvas[data-cursor="crp-ns"]{cursor:ns-resize}
+#canvas[data-cursor="crp-ew"]{cursor:ew-resize}
+#canvas[data-cursor="crp-nwse"]{cursor:nwse-resize}
+#canvas[data-cursor="crp-nesw"]{cursor:nesw-resize}
+#canvas[data-cursor="crp-move"]{cursor:move}
+#canvas[data-cursor="crp-rot"]{cursor:grabbing}
+#canvas[data-cursor="crp-pivot"]{cursor:all-scroll}
+#secCrp .row{margin:3px 0}
+#secCrp button{padding:3px 8px;font-size:11px;white-space:nowrap}
+#secCrp .crp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+#secCrp .crp-grid button{padding:3px 0}
+#secCrp input[type="number"]{width:58px;padding:2px 4px;font-size:11px}
+#secCrp #crpInfo{border-top:1px dashed var(--line);padding-top:4px;line-height:1.5}
+#secCrp #crpInfo.warn{color:#b3261e}
+#secCrp #crpDeg,#secCrp #crpPvx,#secCrp #crpPvy:disabled{opacity:.45}
+#secAnimMap .amm-row{border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:4px 0;background:var(--panel-2)}
+#secAnimMap .amm-row.ok{border-color:#2e9e5b}
+.amm-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px}
+.amm-head b{font-size:12.5px}
+.amm-st{font-size:11px}
+.amm-st.ok{color:#2e9e5b}
+.amm-st.none{color:#d64545;font-weight:700}
+.amm-mid{display:flex;align-items:center;gap:8px;margin-top:4px}
+.amm-prev{width:60px;height:60px;background:var(--hud);border:1px solid var(--line-2);border-radius:4px;image-rendering:pixelated;flex:none}
+.amm-btns{display:flex;flex-wrap:wrap;gap:4px}
+.amm-btns button{padding:3px 8px;font-size:11.5px}
+.amm-group{font-weight:700;color:var(--muted);margin-top:6px;font-size:11px;letter-spacing:.03em}
+#ammSources{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.ammsrc{display:flex;gap:8px;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.ammsrc-th{width:52px;height:52px;flex:none;image-rendering:pixelated;background:var(--hud);border-radius:4px}
+.ammsrc-info{flex:1;font-size:11.5px;display:flex;flex-direction:column}
+.ammsrc-info .small{color:var(--muted)}
+.amm-warnline{color:#c4524d;display:block;padding:4px 6px;background:rgba(214,69,69,.08);border-radius:5px;border:1px solid rgba(214,69,69,.4)}
+.amm-okline{color:#2e9e5b;display:block;padding:4px 6px}
+#ammHelpText{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px;margin-top:4px;line-height:1.75}
+/* หน้าต่างกำหนดเฟรม */
+dialog.ammdlg{width:min(980px, 94vw);max-height:92vh;overflow-y:auto}
+#amSheetWrap{max-height:380px;overflow:auto;border:1px solid var(--line-2);border-radius:6px;background:var(--hud)}
+#amSheetCv{image-rendering:pixelated;cursor:crosshair;display:block}
+#amFrames{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;max-height:180px;overflow-y:auto}
+.amframe{display:flex;align-items:center;gap:6px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:6px;padding:4px}
+.amframe canvas{width:44px;height:44px;image-rendering:pixelated;background:var(--hud);border-radius:4px}
+.amframe-lbl{font-size:11px;min-width:110px}
+.amframe .row{gap:2px}
+.amframe .row button{padding:2px 7px;font-size:12px}
+.ammprev{image-rendering:pixelated;background:var(--hud);border:1px solid var(--line-2);border-radius:6px}
+/* Game Test v2: D-pad 8 ทิศ + สถานะ Mapping */
+.gtdpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:4px}
+.gtdpad .gtbtn{font-size:16px}
+#gtMapWarn{margin-bottom:6px}
+.gtmap-row{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;padding:2px 4px;border-radius:4px}
+.gtmap-row.ok span{color:#2e9e5b}
+.gtmap-row.none span{color:#d64545}
+.gtmap-row b{min-width:92px}
+.gtmap-none{font-weight:700}
+@media (max-width:880px){
+  .gtdpad{grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px)}
+  .gtround{width:60px;height:60px}
+}
+@media (pointer:coarse){
+  .gtdpad .gtbtn{min-width:48px;min-height:48px}
+  .gtdpad{grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px)}
+  .gtround{width:76px;height:76px}
+}
+
 @media (max-width:1180px){
   #rightbar{width:236px}
   .col-editor{width:230px}
@@ -352,6 +485,23 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
   #projName{min-width:100px;max-width:150px}
   .col-editor{width:100%}
 }
+
+/* ---------- แถบขวา: สไลด์เปิด/ปิดบนจอใหญ่ + เลื่อนถึงล่างสุดได้แน่นอน ---------- */
+/* กัน scroll anchoring ดึงตำแหน่งเลื่อนกลับ เวลาระบบ render ซ้ำ (เช่น เพิ่มเฟรม/อัปเดต thumbnail)
+   — ที่เป็นสาเหตุ "เลื่อนลงไปไม่สุด" เพราะพื้นหลังเลื่อนแทนผู้ใช้ */
+#rightbar{overflow-anchor:none}
+/* เอกสารไม่เลื่อนแนวนอนเด็ดขาด — แถบขวาตอนสไลด์ออก/scrollIntoView ต้องไม่ดึงทั้งหน้าจอเลื่อนซ้าย */
+html{overflow-x:hidden}
+@media (min-width:881px){
+  /* จอใหญ่: ปุ่มสไลด์แถบขวา (เดิมแสดงเฉพาะจอเล็ก) + แถบขวาเริ่มต้นเปิด กดปุ่มเพื่อสไลด์ออก/เข้า */
+  #app{overflow:hidden}   /* คลิปแถบขวาตอนสไลด์ออก — กัน root เลื่อนแนวนอนตาม (ไม่กระทบหน้าต่างลอย position:fixed) */
+  #btnRightbar{display:inline-flex;position:fixed;top:56px;right:10px;z-index:47;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+  #rightbar{transition:transform .22s ease,margin-right .22s ease;will-change:transform}
+  #rightbar:not(.open){transform:translateX(105%);margin-right:-272px}
+}
+@media (min-width:881px) and (max-width:1180px){
+  #rightbar:not(.open){margin-right:-236px}
+}
 </style>
 </head>
 <body>
@@ -366,6 +516,9 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
   <div class="tb-group">
     <button class="icon" id="btnUndo" title="ย้อนกลับ (Ctrl+Z)"></button>
     <button class="icon" id="btnRedo" title="ทำซ้ำ (Ctrl+Y)"></button>
+  </div>
+  <div class="tb-group">
+    <button id="btnGameTest" class="primary" title="เปิด Game Test Mode — นำตัวละครและ Animation จากโปรเจกต์ปัจจุบันมาทดลองเดิน/วิ่ง/โจมตีในฉากทดสอบแบบเกม 2D RPG ทันที โดยไม่ต้อง Export และไม่แก้ไขข้อมูลเดิม">🎮 Game Test</button>
   </div>
   <div class="tb-group">
     <button id="btnExport" title="ส่งออกผลงาน">ส่งออก ▾</button>
@@ -552,6 +705,9 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
           <button id="lyUp" title="เลื่อนขึ้น (วาดทับด้านบน)">▲ ขึ้น</button>
           <button id="lyDown" title="เลื่อนลง">▼ ลง</button>
           <button id="lyMerge" title="รวมกับเลเยอร์ด้านล่าง">⇩ รวมลงล่าง</button>
+          <button id="lyCopy" title="คัดลอกเนื้อหาเลเยอร์นี้ไว้วางลงเลเยอร์อื่น (Ctrl+C) — ใช้ข้ามทิศทาง/ข้ามเฟรมได้">📋 คัดลอกเลเยอร์</button>
+          <button id="lyPaste" title="วางเนื้อหาที่คัดลอกไว้ แทนที่เลเยอร์ที่เลือกทั้งหมด (Ctrl+V)">📄 วางทับ</button>
+          <button id="lyPasteOver" title="วาดเนื้อหาที่คัดลอกไว้ซ้อนบนเลเยอร์ที่เลือก — พิกเซลโปร่งใสไม่ทับของเดิม (Ctrl+Shift+V)">🎨 วาดซ้อน</button>
           <button id="lyClear" class="danger" title="ลบพิกเซลทั้งเลเยอร์">เคลียร์</button>
         </div>
         <div id="layerList"></div>
@@ -564,6 +720,78 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
       <div class="sec-body">
         <div class="small">โปรแกรมนี้ไม่มีภาพสำเร็จรูป — กดปุ่มเพื่อสร้าง <b>เลเยอร์เปล่า</b>ของชิ้นส่วน แล้ววาดเองทีละพิกเซล</div>
         <div id="partsTree"></div>
+      </div>
+    </details>
+
+    <details id="secCrp">
+      <summary>✂️ Crop &amp; Rotate (ตัด/หมุนส่วนของ Sprite)</summary>
+      <div class="sec-body">
+        <div class="small">ใช้ร่วมกับเครื่องมือ <b>✂ Crop &amp; Rotate (C)</b> บน Canvas: <b>ลาก</b> = สร้างกรอบเลือก · <b>ลากขอบ/มุมกรอบ</b> = ปรับขนาด · <b>ลากในกรอบ</b> = ย้ายกรอบ → กดปุ่มหมุน/Crop = <b>ตัดชิ้นส่วนออกเป็นโหมดพรีวิว</b> (ยังไม่แก้ของจริง) → ย้าย <b>Pivot ✛</b> (จุดหมุน เช่น หัวไหล่/มือ/เอว/คอ) · ลาก <b>ด้ามหมุน ↻</b> หรือใส่องศา → พรีวิวสดบน Canvas → <b>Apply</b> รวมกลับเข้า Sprite (เข้าระบบ Undo/Redo เดิม) หรือ <b>Cancel</b> ยกเลิก · หมุนแบบ Nearest Neighbor คมชัด ไม่เบลอ ไม่มีสีเทาเหมือน Anti-aliasing</div>
+        <div class="row">
+          <button id="crpSelAll" class="grow" title="เลือกทั้งภาพ (สำหรับหมุนทั้ง Sprite)">เลือกทั้งภาพ</button>
+          <button id="crpClear" title="ยกเลิกกรอบเลือก (Esc ก็ได้)">ยกเลิกกรอบ</button>
+        </div>
+        <div class="row">
+          <button id="crpCrop" class="grow" title="ตัดพื้นที่ที่เลือกออกเป็นชิ้นส่วน (พรีวิว — ย้าย/หมุนได้ ยังไม่แก้ของจริง)">✂ Crop (ตัดออก)</button>
+        </div>
+        <div class="row">
+          <button id="crpL90" class="grow" title="หมุนทวนเข็มนาฬิกา 90° (พรีวิว)">↺ ซ้าย 90°</button>
+          <button id="crpR90" class="grow" title="หมุนตามเข็มนาฬิกา 90° (พรีวิว)">↻ ขวา 90°</button>
+          <button id="crpReset" title="ตั้งองศาการหมุนกลับเป็น 0° (ชิ้นส่วนยังอยู่ ย้าย/Pivot ได้)">Reset องศา</button>
+        </div>
+        <div class="row">
+          <span class="min small">องศา</span>
+          <input id="crpDeg" type="number" min="-360" max="360" step="1" value="0" title="องศาการหมุน (+ = ตามเข็ม · − = ทวนเข็ม) — ใส่ได้ถึงละเอียด 1°">
+          <span class="small" id="crpDegLb">0°</span>
+        </div>
+        <div class="crp-grid">
+          <button data-d="-15">−15°</button><button data-d="-10">−10°</button><button data-d="-5">−5°</button>
+          <button data-d="5">+5°</button><button data-d="10">+10°</button><button data-d="15">+15°</button>
+        </div>
+        <div class="row">
+          <span class="min small">Pivot</span>
+          <label class="small">X <input id="crpPvx" type="number" step="0.5"></label>
+          <label class="small">Y <input id="crpPvy" type="number" step="0.5"></label>
+          <button id="crpPvC" title="ตั้ง Pivot ที่จุดกึ่งกลางของกรอบ">กลางกรอบ</button>
+        </div>
+        <div class="row">
+          <button id="crpApply" class="primary grow" title="รวมชิ้นส่วนที่หมุน/ย้ายกลับเข้า Sprite — บันทึกเข้าระบบ Undo/Redo เดิม">✓ Apply (รวมกลับ)</button>
+          <button id="crpCancel" class="grow" title="ยกเลิก — ภาพกลับสู่สภาพเดิมทันที (ไม่แก้ของจริง)">✕ Cancel</button>
+        </div>
+        <div class="small" id="crpInfo">—</div>
+      </div>
+    </details>    <details id="secAnimMap">
+      <summary>🎬 Animation Mapping (กำหนดท่า + เลือกเฟรมเอง)</summary>
+      <div class="sec-body">
+        <div class="row"><label class="min small">อาชีพที่กำหนด</label>
+          <b id="ammClassLbl" class="small">—</b></div>
+        <div class="small">Mapping <b>แยกตามอาชีพ</b> — เปลี่ยนอาชีพในแผง "ตัวละคร" แล้วระบบจะโหลด Mapping ของอาชีพนั้นให้ถูกต้อง (ไม่ใช้ของอาชีพก่อนหน้า) · ผู้ใช้เป็นคนกำหนดเองว่า Sprite/เฟรมไหนคือท่าอะไร โปรแกรมไม่เดา ไม่วิเคราะห์ภาพ</div>
+        <div class="row">
+          <button id="ammImportBtn" class="primary grow" title="นำเข้าไฟล์ภาพ Sprite Sheet (PNG/JPG/WEBP/GIF) — ภาพที่รวมหลายท่า/หลายเฟรมอยู่ในไฟล์เดียวก็ได้ ขนาดเท่าไรก็ได้">＋ นำเข้า Sprite Sheet</button>
+          <input type="file" id="ammFile" accept="image/*" style="display:none">
+        </div>
+        <div class="row small" title="เพิ่ม Timeline ที่วาดในโปรเจกต์เป็นแหล่งเฟรม — เฟรมจะตาม Timeline จริง แก้ภาพแล้วอัปเดตสด">
+          <span class="min">เพิ่มจาก Timeline:</span>
+          <button class="ammAddTl" data-dir="down">▼ D</button>
+          <button class="ammAddTl" data-dir="up">▲ U</button>
+          <button class="ammAddTl" data-dir="left">◀ L</button>
+          <button class="ammAddTl" data-dir="right">▶ R</button>
+        </div>
+        <div id="ammSources"></div>
+        <div class="small" id="ammOtherCount"></div>
+        <div id="ammAssignList"></div>
+        <div class="small" id="ammMissSummary"></div>
+        <div class="row"><button id="ammOpenGameTest" class="grow primary" title="เปิด Game Test Mode — เล่นจาก Mapping นี้ทันที">🎮 ทดสอบใน Game Test</button></div>
+        <button id="ammHelpToggle" class="small" style="width:100%">▸ วิธีกำหนด Animation Mapping (คลิกเพื่อดู)</button>
+        <div id="ammHelpText" class="small hide">
+          1. กด "＋ นำเข้า Sprite Sheet" เลือกไฟล์ภาพ Sprite ของอาชีพนี้ (ขนาด/จำนวนเฟรมเท่าไรก็ได้) หรือเพิ่มจาก Timeline ที่วาดในโปรเจกต์<br>
+          2. กดปุ่ม "เลือกเฟรม" ของท่าที่ต้องการ (เช่น Walk Front) — จะเปิดหน้าต่างกำหนดเฟรม<br>
+          3. ตั้งขนาดเฟรม W×H และตำแหน่งเริ่มต้น X,Y (โปรแกรมคำนวณ Grid จากขนาดจริงของภาพ) แล้วคลิกเลือกเฟรมบนภาพ — คลิกหลายช่อง = หลายเฟรมใน Animation เดียวกัน เลือกช่องไหนก็ได้ไม่ต้องติดกัน (รองรับหลายท่าในไฟล์เดียว)<br>
+          4. จัดลำดับเฟรมด้วย ▲▼ · เอาเฟรมออกด้วย ✕ · ตั้ง FPS และ Loop/เล่นครั้งเดียว · ดูพรีวิว real-time<br>
+          5. กด "บันทึกการกำหนด" — ทำซ้ำกับท่าอื่นจนครบ 6 ท่า (Idle Front / Idle Back / Walk Front / Walk Back / Attack Front / Attack Back)<br>
+          6. กด "🎮 ทดสอบใน Game Test" — เดิน 8 ทิศ, Idle ตามทิศล่าสุด, โจมตี (หันขึ้น = Attack Back · หันลง/ข้าง = Attack Front), Click-to-Move จะเล่นจาก Mapping นี้ทันที · ท่าที่ยังไม่กำหนดจะแจ้งเตือน ไม่เลือกท่าอื่นแทนเอง<br>
+          หมายเหตุ: ไม่แก้ Sprite ต้นฉบับ ไม่แก้ Timeline เดิม · Mapping บันทึกไปกับโปรเจกต์อัตโนมัติ
+        </div>
       </div>
     </details>
 
@@ -821,12 +1049,14 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
     <tr><td>Space + ลาก</td><td>เลื่อน Canvas (Pan) · ล้อเมาส์ = ซูม · ปุ่มกลางเมาส์ = Pan</td></tr>
     <tr><td>Ctrl+Z / Ctrl+Y</td><td>Undo / Redo</td></tr>
     <tr><td>Ctrl+S</td><td>บันทึกโปรเจกต์ (มี Autosave อัตโนมัติทุก ~2 วินาทีหลังแก้)</td></tr>
+    <tr><td>Ctrl+C / Ctrl+V</td><td>คัดลอกเนื้อหาเลเยอร์ปัจจุบัน / วางแทนที่เลเยอร์ที่เลือก · Ctrl+Shift+V = วาดซ้อน (พิกเซลโปร่งใสไม่ทับของเดิม) · วางข้ามทิศทาง/ข้ามเฟรมได้</td></tr>
     <tr><td>1–4</td><td>สลับทิศทาง Down / Up / Left / Right</td></tr>
     <tr><td>, / .</td><td>เลื่อนดูเฟรมก่อนหน้า / เฟรมถัดไปใน Timeline</td></tr>
     <tr><td>Q</td><td>จัดวางภาพอ้างอิง — ลากย้ายภาพต้นแบบ · ล้อเมาส์ขยาย/ย่อ (ต้องปลดล็อกในแผงภาพอ้างอิง)</td></tr>
     <tr><td>ภาพอ้างอิง</td><td>กด 📁 ในแผง “ภาพอ้างอิง” ข้างแคนวาส หรือลากไฟล์มาวาง — ย้าย/ขยาย/ล็อก/เลือกวางหลัง-หน้าพิกเซลได้ · ดูดสีจากภาพด้วยเครื่องมือ I (คลิกบนพรีวิวก็ได้) · ไม่ถูก Export เว้นแต่ติ๊ก “รวมภาพอ้างอิง”</td></tr>
     <tr><td>Animation</td><td>แถบ Timeline ใต้หน้าจอวาด: เพิ่ม/ทำสำเนา/คัดลอก/วาง/ลบ/เปลี่ยนลำดับเฟรม · ▶ เล่น Animation บนหน้าจอวาดได้ทันที (คลิกหน้าจอเพื่อหยุด) · กำหนด FPS และเวลาต่อเฟรม · 👁 ซ่อนเฟรม (เฟรมซ่อนจะไม่ถูกเล่นและไม่ถูก Export เหมาะกับงานหลายท่าทาง) · 💾 บันทึก → ตั้งความเร็ว (FPS) ตอนบันทึกได้ · Onion Skin ช่วยลอกเฟรมก่อนหน้า (แดง) และถัดไป (เขียว) · 🎬 ดู Animation แบบเล่นซ้ำขณะแก้งาน · Export Animation กำหนด FPS ตอน Export ได้</td></tr>
-    <tr><td>Preview ลอย</td><td>ปุ่ม 🪟 ในแผงพรีวิว — หน้าต่างลากย้าย/ปรับขนาด/ย่อ/ปิด อัปเดตสดขณะวาด ซูม เลือกทิศ และพื้นหลังโปร่งใส</td></tr>
+        <tr><td>Game Test</td><td>ปุ่ม 🎮 Game Test บนแถบด้านบน — ทดลองควบคุมตัวละครจากโปรเจกต์ปัจจุบันเหมือนเล่นเกม 2D RPG โดยไม่ต้อง Export: WASD/ลูกศร เดิน · Space โจมตี · Shift วิ่ง (หรือใช้ปุ่มบนจอ รองรับนิ้วสัมผัส) · เลือกฉาก/ซูม/เลื่อนมุมมอง · วางสิ่งกีดขวางทดสอบ Collision · Debug Hitbox/Hurtbox/Sprite Bounds/Pivot · ปรับ FPS เฉพาะโหมดทดสอบ · กด “⇄ แก้ไขใน Editor” เพื่อกลับไปวาดแล้วข้อมูลอัปเดตทันทีเมื่อกลับมา — การทดสอบไม่แก้ไขภาพและข้อมูล Animation ต้นฉบับ</td></tr>
+    <tr><td>Animation Mapping</td><td>แผง "🎬 Animation Mapping" ด้านขวา — ผู้ใช้กำหนดเองว่า Sprite/Preset แต่ละชิ้นคือท่าอะไร (Idle Front · Idle Back · Walk Front · Walk Back · Attack Front · Attack Back) โดยโปรแกรมไม่เดา ไม่วิเคราะห์ภาพ: นำเข้า Sprite Sheet (ขนาด/จำนวนเฟรมเท่าไรก็ได้) หรือเพิ่มจาก Timeline ของโปรเจกต์ → กด "เลือกเฟรม" เพื่อตั้งขนาดเฟรม W×H และตำแหน่งเริ่มต้น X,Y (Grid คำนวณจากขนาดจริงของภาพ) → คลิกเลือกหลายเฟรมบนภาพ (เลือกช่องไหนก็ได้ รองรับหลายท่าในไฟล์เดียวและเฟรมไม่ติดกัน) → จัดลำดับ ▲▼ / เอาออก ✕ → ตั้ง FPS และ Loop/เล่นครั้งเดียว พร้อมพรีวิว real-time → บันทึก · Mapping แยกตามอาชีพ (สลับอาชีพ = โหลด Mapping ของอาชีพนั้น) · ยกเลิก/เปลี่ยนภายหลังได้ · แสดงสถานะ ✓ กำหนดแล้ว / ⛔ Not Assigned ทุกท่า · ไม่แก้ Sprite ต้นฉบับ · Game Test Mode เล่นจาก Mapping เท่านั้น (เดิน 8 ทิศ + Flip · Idle ตามทิศล่าสุด · โจมตี: หันขึ้น = Attack Back · หันลง/ข้าง = Attack Front · ซ้าย = Flip · Click-to-Move) และท่าที่ยังไม่กำหนดจะแจ้งเตือนแทนการเลือกท่าอื่นมาแทนเอง</td></tr><tr><td>Preview ลอย</td><td>ปุ่ม 🪟 ในแผงพรีวิว — หน้าต่างลากย้าย/ปรับขนาด/ย่อ/ปิด อัปเดตสดขณะวาด ซูม เลือกทิศ และพื้นหลังโปร่งใส</td></tr>
     <tr><td>สี</td><td>+ สีใหม่… เปิด Color Picker (สเปกตรัม HSV / RGB / HEX) · ดับเบิลคลิกสีในพาเลต = แก้ไข · ปุ่มลบสี = ลบ · ชุดสีบันทึก/โหลดได้</td></tr>
   </table>
   <div class="dlg-row small" style="margin-top:10px">
@@ -834,6 +1064,254 @@ button,.dirtab,.tlchip,.sw,summary,.ascope button{touch-action:manipulation;
     · ชิ้นส่วนที่วาดเสร็จกด “บันทึกเป็น Asset” เพื่อนำไปใช้กับตัวละครอื่นได้
   </div>
   <div class="dlg-foot"><button id="helpClose" class="primary">เข้าใจแล้ว</button></div>
+</dialog>
+
+<!-- ===== Game Test Mode overlay v2 (เล่นจาก Animation Mapping เท่านั้น) ===== -->
+<div id="gtOverlay" aria-label="Game Test Mode">
+  <div id="gtHead">
+    <span class="gt-title">🎮 Game Test Mode</span>
+    <span id="gtProjLabel"></span>
+    <span style="flex:1"></span>
+    <button id="gtPauseBtn" title="พัก/เล่นต่อการจำลองเกม (การเคลื่อนที่และ Animation หยุดชั่วคราว)">⏸ พักเกม</button>
+    <button id="gtBtnFull" title="ขยายหน้าต่างทดสอบเต็มหน้าจอ">⛶ เต็มจอ</button>
+    <button id="gtBtnEdit" title="พักเกมและกลับไปหน้าจอวาด — แก้ไขภาพ/กำหนด Animation Mapping ได้ตามปกติ แล้วกลับมาข้อมูลจะอัปเดตให้อัตโนมัติ">⇄ แก้ไขใน Editor</button>
+    <button id="gtBtnClose" class="danger" title="ปิด Game Test Mode และกลับสู่ Editor ตามปกติ">× ปิด</button>
+  </div>
+  <div id="gtMain">
+    <div id="gtStageCol">
+      <div id="gtCanvasWrap">
+        <canvas id="gtCanvas"></canvas>
+        <div id="gtHud"></div>
+      </div>
+      <div id="gtStatus">—</div>
+      <div id="gtCtrl">
+        <div class="gtdpad" title="D-pad 8 ทิศ — กดค้างเพื่อเดินต่อเนื่อง รองรับเมาส์และนิ้วสัมผัส">
+          <button class="gtbtn" id="gtKUpLeft" data-gk="upLeft" title="เดินเฉียงซ้ายขึ้น = Walk Back + Flip">↖</button>
+          <button class="gtbtn" id="gtKUp" data-gk="up" title="เดินขึ้น (W / ลูกศรขึ้น) = Walk Back">▲</button>
+          <button class="gtbtn" id="gtKUpRight" data-gk="upRight" title="เดินเฉียงขวาขึ้น = Walk Back">↗</button>
+          <button class="gtbtn" id="gtKLeft" data-gk="left" title="เดินซ้าย (A / ลูกศรซ้าย) = Walk Front + Flip">◀</button>
+          <button class="gtbtn" id="gtKAtk" data-gk="attack" title="โจมตี (Space) — หันขึ้น = Attack Back · หันลง/ข้าง = Attack Front · หันทางซ้าย = Flip">🗡</button>
+          <button class="gtbtn" id="gtKRight" data-gk="right" title="เดินขวา (D / ลูกศรขวา) = Walk Front">▶</button>
+          <button class="gtbtn" id="gtKDownLeft" data-gk="downLeft" title="เดินเฉียงซ้ายลง = Walk Front + Flip">↙</button>
+          <button class="gtbtn" id="gtKDown" data-gk="down" title="เดินลง (S / ลูกศรลง) = Walk Front">▼</button>
+          <button class="gtbtn" id="gtKDownRight" data-gk="downRight" title="เดินเฉียงขวาลง = Walk Front">↘</button>
+        </div>
+        <button class="gtbtn gtround" id="gtKRun" data-gk="run" title="วิ่ง — กดค้าง (Shift) = เล่น Walk เร็วขึ้น ×1.6">🏃</button>
+        <div class="small" style="max-width:240px">
+          <b>คีย์บอร์ด:</b> WASD/ลูกศร = เดิน 8 ทิศ · Space = โจมตี · Shift = วิ่ง<br>
+          <b>Click-to-Move:</b> คลิกซ้าย/แตะบนพื้น = เดินไปจุดนั้น (🎯 = เป้าหมาย) · คลิกใหม่ = เปลี่ยนเป้าหมาย · ใช้คีย์บอร์ด = ยกเลิกเป้าหมาย<br>
+          <b>เครื่องมือฉาก:</b> เลื่อนมุมมอง / วาง-ลบสิ่งกีดขวาง (ในแผงฉาก) · ล้อเมาส์ = ซูม
+        </div>
+      </div>
+    </div>
+    <div id="gtSide">
+      <div id="gtPresets">
+        <b class="small">Test Presets</b>
+        <div class="row">
+          <button data-preset="idle">Idle Test</button>
+          <button data-preset="walk">Walk Test</button>
+          <button data-preset="attack">Attack Test</button>
+          <button data-preset="collision">Collision Test</button>
+          <button data-preset="hitbox">Hitbox Test</button>
+          <button data-preset="full">Full Test</button>
+        </div>
+        <div class="small" style="margin-top:4px">Preset ตั้งค่าการทดสอบ — Animation เล่นจาก Mapping ที่ผู้ใช้กำหนดเท่านั้น</div>
+      </div>
+
+      <details id="gtSecMap" open>
+        <summary>🗺 Animation Mapping ของอาชีพนี้ (ใช้จริงในเกม)</summary>
+        <div class="sec-body">
+          <div id="gtMapWarn" class="gt-note" style="display:none"></div>
+          <div id="gtMapStatus"></div>
+          <div class="row">
+            <button id="gtBtnOpenAmm" class="grow" title="พักเกมและเปิดแผง Animation Mapping เพื่อกำหนด/แก้ไขท่า">🗺 เปิดแผง Animation Mapping</button>
+          </div>
+          <div class="small">Game Test เล่นเฉพาะท่าที่กำหนดใน Mapping — ท่าที่ยังไม่กำหนด (Not Assigned) จะไม่ถูกเล่นและจะแจ้งเตือน ไม่มีการเลือกท่าอื่นมาแทนเอง</div>
+        </div>
+      </details>
+
+      <details id="gtSecScene" open>
+        <summary>🎬 ฉากและมุมมอง (Test Scene)</summary>
+        <div class="sec-body">
+          <div class="row"><label class="min small" style="min-width:70px">เครื่องมือฉาก</label>
+            <select id="gtToolSel" class="grow" title="คลิกเพื่อเดิน (Click-to-Move) / เลื่อนมุมมอง / วางสิ่งกีดขวางทดสอบ Collision / ลบสิ่งกีดขวาง">
+              <option value="move">🚶 คลิกเพื่อเดิน (Click-to-Move)</option>
+              <option value="pan">🖐 เลื่อนมุมมอง</option>
+              <option value="add">🧱 วางสิ่งกีดขวาง (คลิก/ลาก)</option>
+              <option value="del">🧹 ลบสิ่งกีดขวาง (คลิก/ลาก)</option>
+            </select>
+            <button id="gtClearObsBtn" title="ลบสิ่งกีดขวางทั้งหมด">ลบทั้งหมด</button>
+          </div>
+          <div class="row"><label class="min small" style="min-width:70px">ฉากทดสอบ</label>
+            <select id="gtScene" class="grow">
+              <option value="grass">ฉากพื้นหญ้า</option>
+              <option value="stone">ฉากพื้นหิน</option>
+              <option value="dungeon">ฉากดันเจี้ยน</option>
+              <option value="grid">พื้นตาราง</option>
+              <option value="trans">พื้นหลังโปร่งใส</option>
+              <option value="empty">ฉากทดสอบเปล่า</option>
+            </select>
+          </div>
+          <div class="row"><label class="min small" style="min-width:70px">ขนาดฉาก</label>
+            <input type="number" id="gtSceneW" min="64" max="2048" step="16" style="width:72px" title="ความกว้างพื้นที่ทดสอบ (พิกเซล)">
+            × <input type="number" id="gtSceneH" min="64" max="2048" step="16" style="width:72px" title="ความสูงพื้นที่ทดสอบ (พิกเซล)">
+            <button id="gtSceneApply">ใช้ขนาดนี้</button>
+          </div>
+          <div class="row"><label class="min small" style="min-width:70px">ซูมฉาก</label>
+            <input type="range" id="gtZoomRange" min="1" max="8" step="1" style="flex:1">
+            <span id="gtZoomLbl" class="mono small" style="min-width:30px;text-align:right">3×</span>
+          </div>
+          <div class="row">
+            <label class="small"><input type="checkbox" id="gtShowGridChk" checked>แสดง Grid</label>
+            <label class="small" title="ตัวละครเดินออกนอกขอบฉากไม่ได้ — ขอบฉากทำหน้าที่เป็นกำแพง"><input type="checkbox" id="gtBorderChk" checked>ขอบฉากเป็นกำแพง</label>
+          </div>
+          <div class="small" id="gtObsCount"></div>
+          <div class="small">สิ่งกีดขวางอยู่ในโหมดทดสอบเท่านั้น — ไม่ถูกบันทึกลงโปรเจกต์</div>
+        </div>
+      </details>
+
+      <details id="gtSecMove" open>
+        <summary>🏃 การเคลื่อนที่ (Movement)</summary>
+        <div class="sec-body">
+          <div class="row"><label class="min small" style="min-width:96px">ความเร็วเดิน</label>
+            <input type="number" id="gtWalkSpd" min="1" max="600" style="width:70px"> <span class="small">px/วินาที</span></div>
+          <div class="row"><label class="min small" style="min-width:96px">ความเร็ววิ่ง</label>
+            <input type="number" id="gtRunSpd" min="1" max="600" style="width:70px"> <span class="small">px/วินาที</span></div>
+          <div class="row"><label class="min small" style="min-width:96px">จุดเริ่มต้น X, Y</label>
+            <input type="number" id="gtStartX" style="width:70px" title="ตำแหน่งเริ่มต้นแกน X (กลางตัวละคร)">
+            <input type="number" id="gtStartY" style="width:70px" title="ตำแหน่งเริ่มต้นแกน Y (กลางตัวละคร)">
+            <button id="gtSetStartHere" title="ตั้งตำแหน่งปัจจุบันของตัวละครเป็นจุดเริ่มต้น">ที่นี่</button></div>
+          <div class="row">
+            <button id="gtResetPos" class="grow" title="ย้ายตัวละครกลับที่จุดเริ่มต้น">↺ รีเซ็ตตำแหน่ง</button>
+          </div>
+          <div class="small">เดิน 8 ทิศ (รวมเฉียง) · ความเร็วแนวทแยงถูกปรับให้เท่าความเร็วปกติ (บวกเวกเตอร์ 1/√2) · คำนวณตาม Delta Time จึงเร็วเท่ากันทุก FPS · หยุดเดินแล้ว Idle ตามทิศล่าสุด (ขึ้น = Idle Back · ซ้าย = Flip) · โฟกัสช่องตั้งค่า = หยุดเดิน</div>
+        </div>
+      </details>
+
+      <details id="gtSecCol" open>
+        <summary>🧱 Collision Box</summary>
+        <div class="sec-body">
+          <div class="row"><label class="min small" style="min-width:96px">ขนาดกล่อง W×H</label>
+            <input type="number" id="gtColW" min="1" style="width:64px" title="ความกว้าง Collision Box (พิกเซล Sprite)">
+            × <input type="number" id="gtColH" min="1" style="width:64px" title="ความสูง Collision Box (พิกเซล Sprite)"></div>
+          <div class="row"><label class="min small" style="min-width:96px">ออฟเซ็ต X, Y</label>
+            <input type="number" id="gtColOX" style="width:64px" title="ออฟเซ็ตจากจุดกึ่งกลางตัวละครแกน X">
+            <input type="number" id="gtColOY" style="width:64px" title="ออฟเซ็ตจากจุดกึ่งกลางตัวละครแกน Y">
+            <label class="small"><input type="checkbox" id="gtShowColChk">แสดงกรอบ</label></div>
+          <div class="small">หน่วย = พิกเซลของ Sprite · กล่องอ้างอิงจุดกึ่งกลางตัวละคร (ปรับออฟเซ็ตได้) · ตัวละครจะเดินทะลุกำแพง/สิ่งกีดขวางไม่ได้ · ค่าเริ่มต้นได้จากขนาด Canvas จริงในโปรเจกต์</div>
+        </div>
+      </details>
+
+      <details id="gtSecDebug">
+        <summary>🐞 Debug (Hitbox / Hurtbox / Bounds)</summary>
+        <div class="sec-body">
+          <div class="row">
+            <label class="small"><input type="checkbox" id="gtShowHit">Hitbox</label>
+            <label class="small"><input type="checkbox" id="gtShowHurt">Hurtbox</label>
+            <label class="small"><input type="checkbox" id="gtShowBounds">Sprite Bounds</label>
+          </div>
+          <div class="row">
+            <label class="small"><input type="checkbox" id="gtShowPivot" checked>Pivot</label>
+            <label class="small"><input type="checkbox" id="gtShowOrigin">Origin</label>
+            <label class="small"><input type="checkbox" id="gtShowCenter">จุดกึ่งกลาง</label>
+            <label class="small"><input type="checkbox" id="gtShowFlipChk" checked>แสดง Flip</label>
+          </div>
+          <div class="gt-legend">
+            <i style="border-color:#d64545"></i>Collision Box ·
+            <i style="border-color:#3e63dd"></i>Sprite Bounds ·
+            <i style="border-color:#2e9e5b"></i>Hitbox ·
+            <i style="border-color:#c95bd6"></i>Hurtbox<br>
+            <i style="border-color:#ff9d2e"></i>Pivot = จุดยึดตัวละคร ·
+            <i style="border-color:#00b7c3"></i>Origin = มุมซ้ายบน Sprite ·
+            <i style="border-color:#26282e"></i>จุดกึ่งกลาง ·
+            <i style="border-color:#3e63dd"></i>🎯 = เป้าหมาย Click-to-Move
+          </div>
+          <div id="gtBoxStatus" class="gt-note"></div>
+        </div>
+      </details>
+
+      <details id="gtSecAnim" open>
+        <summary>🎞 ข้อมูล Animation (Real-time)</summary>
+        <div class="sec-body">
+          <dl class="gt-info">
+            <dt>ชื่อ Animation</dt><dd id="gtInfoName">—</dd>
+            <dt>ทิศทาง</dt><dd id="gtInfoDir">—</dd>
+            <dt>FPS</dt><dd id="gtInfoFps">—</dd>
+            <dt>เฟรมปัจจุบัน</dt><dd id="gtInfoFrame">—</dd>
+            <dt>จำนวนเฟรมทั้งหมด</dt><dd id="gtInfoTotal">—</dd>
+            <dt>สถานะ</dt><dd id="gtInfoState">—</dd>
+            <dt>ความเร็วเล่น</dt><dd id="gtInfoSpeed">—</dd>
+          </dl>
+          <div class="row">
+            <button id="gtPlayBtn" title="เล่น/หยุด Animation ที่แสดงอยู่">▶ เล่น</button>
+            <button id="gtStepPrev" title="เลื่อนไปเฟรมก่อนหน้า (เลื่อนเฟรมด้วยตนเอง)">⏮ เฟรมก่อน</button>
+            <button id="gtStepNext" title="เลื่อนไปเฟรมถัดไป (เลื่อนเฟรมด้วยตนเอง)">⏭ เฟรมถัดไป</button>
+            <label class="small" title="เล่นวนซ้ำ (มีผลกับโหมดดู Manual)"><input type="checkbox" id="gtLoopChk" checked>วนซ้ำ</label>
+          </div>
+          <div class="row"><label class="min small" style="min-width:96px">ดู Animation</label>
+            <select id="gtInspectSel" class="grow" title="เลือกท่าที่กำหนดแล้วมาดูแยกจากการเดิน — รายการมาจาก Mapping เท่านั้น">
+              <option value="">ตามเกม (อัตโนมัติ)</option>
+            </select></div>
+          <div class="row"><label class="min small" style="min-width:96px">ความเร็ว (FPS)</label>
+            <label class="small" title="ใช้ FPS ของแต่ละท่าจาก Animation Mapping — เฟรม Timeline ที่ตั้งเวลาเองยังใช้เวลาของเฟรมนั้น"><input type="checkbox" id="gtFpsProjChk" checked>ตาม Mapping (แต่ละท่าตั้งเอง)</label>
+            <input type="number" id="gtFpsOvr" min="1" max="60" style="width:60px" title="FPS Override เฉพาะในโหมดทดสอบ — ใช้แทน FPS ของทุกท่า ไม่แก้ Mapping">
+          </div>
+          <div class="row">
+            <label class="small" title="กดโจมตีซ้ำได้ระหว่าง Animation โจมตียังไม่จบ"><input type="checkbox" id="gtAtkAgainChk">โจมตีซ้ำได้ (ข้ามการกันซ้อน)</label>
+          </div>
+          <div class="small">Attack เล่นครั้งเดียวต่อการกด (จบแล้วกลับ Idle/Walk ตามระบบเดิม) · หันขึ้น = Attack Back · หันลง/ข้าง = Attack Front · หันทางซ้าย = Horizontal Flip อัตโนมัติ · เฟรมทุกเฟรมมาจาก Sprite Sheet/Timeline ที่ผู้ใช้เลือกใน Mapping — ไม่มีภาพจำลอง</div>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+<button id="gtResumeChip" title="กลับสู่ Game Test Mode (ข้อมูลที่แก้ไขล่าสุดจะถูกใช้ทันที)">🎮 กลับ Game Test</button>
+
+<!-- ===== หน้าต่างกำหนดเฟรม Animation (Frame Assignment Editor) ===== -->
+<dialog id="dlgAnimMap" class="ammdlg">
+  <h3 id="amTitle">กำหนดเฟรม Animation</h3>
+  <div class="dlg-row"><label class="min">แหล่ง Sprite</label>
+    <select id="amSrc" class="grow"></select>
+    <button id="amSrcImport" title="นำเข้าภาพ Sprite Sheet ใหม่ (ขนาดเท่าไรก็ได้ — โปรแกรมอ่านขนาดจริง)">＋ นำเข้าภาพ</button>
+    <input type="file" id="amFile2" accept="image/*" style="display:none">
+  </div>
+  <div class="dlg-row" id="amGridRow"><label class="min">Grid เฟรม</label>
+    <span class="small">ขนาดเฟรม</span>
+    <input type="number" id="amGW" min="1" style="width:64px" title="ความกว้างของเฟรมแต่ละเฟรม (พิกเซลจริงของภาพ)">
+    × <input type="number" id="amGH" min="1" style="width:64px" title="ความสูงของเฟรมแต่ละเฟรม (พิกเซลจริงของภาพ)">
+    <span class="small">· เริ่มต้น X</span>
+    <input type="number" id="amGX" min="0" style="width:56px" title="ตำแหน่งเริ่มต้นแกน X ของ Grid (เผื่อขอบภาพ)">
+    <span class="small">Y</span>
+    <input type="number" id="amGY" min="0" style="width:56px" title="ตำแหน่งเริ่มต้นแกน Y ของ Grid">
+    <span class="small mono" id="amHover" style="min-width:150px"></span>
+  </div>
+  <div id="amSheetEmpty" class="small" style="display:none;padding:20px;text-align:center">ยังไม่มีแหล่ง Sprite ของอาชีพนี้ — กด "＋ นำเข้าภาพ" เพื่อเลือกไฟล์ Sprite Sheet หรือปิดหน้าต่างแล้วเพิ่มจาก Timeline ในแผง Animation Mapping</div>
+  <div id="amSheetWrap" style="display:none"><canvas id="amSheetCv"></canvas></div>
+  <div class="dlg-row" id="amSheetBar" style="display:none">
+    <label class="small">ซูม</label>
+    <input type="range" id="amZoom" min="1" max="8" step="1" style="flex:1">
+    <span id="amZoomLbl" class="mono small" style="min-width:28px">2×</span>
+    <span id="amRangeInfo" class="small" style="flex:2"></span>
+  </div>
+  <div class="dlg-row" id="amFramesWrap">
+    <label class="min">เฟรมที่เลือก (<b id="amCount">0</b>)</label>
+    <button id="amClearSel" title="เคลียร์การเลือกทั้งหมด">เคลียร์</button>
+    <div id="amFrames" class="amframelist"></div>
+  </div>
+  <div class="dlg-row"><label class="min">การเล่น</label>
+    <span class="small">FPS</span>
+    <input type="number" id="amFps" min="1" max="60" style="width:60px" title="ความเร็วเล่นของท่านี้ (อิสระจากท่าอื่น)">
+    <label class="small" title="เล่นวนซ้ำ (เช่น Idle/Walk) หรือเล่นครั้งเดียว (เช่น Attack)"><input type="checkbox" id="amLoop" checked>เล่นวนซ้ำ (Loop)</label>
+    <button id="amPlayBtn" title="พรีวิว Animation จากเฟรมที่เลือก — real-time">⏸ พัก</button>
+  </div>
+  <div class="dlg-row"><label class="min">พรีวิว</label>
+    <canvas id="amPrevCv" width="150" height="150" class="ammprev"></canvas>
+  </div>
+  <div class="dlg-row" style="justify-content:flex-end">
+    <button id="amUnassign" class="danger" title="ยกเลิกการกำหนดท่านี้ — สถานะกลับเป็น Not Assigned">ยกเลิกการกำหนด</button>
+    <button id="amCancel">ปิด</button>
+    <button id="amSave" class="primary" title="บันทึกการกำหนดท่านี้ (เฟรม + ลำดับ + FPS + Loop) — ไม่แก้ Sprite ต้นฉบับ">บันทึกการกำหนด</button>
+  </div>
 </dialog>
 
 <div id="toasts"></div>
@@ -911,6 +1389,7 @@ const ICONS = {
   lock:     SVG('<rect x="4" y="7" width="8" height="6" rx="1"/><path d="M5.5 7 V5.5 a2.5 2.5 0 0 1 5 0 V7"/>'),
   unlock:   SVG('<rect x="4" y="7" width="8" height="6" rx="1"/><path d="M5.5 7 V5 a2.5 2.5 0 0 1 5-.4"/>'),
   image:    SVG('<rect x="2" y="2.5" width="12" height="11" rx="1"/><circle cx="5.6" cy="6" r="1.2"/><path d="M2.5 11.5 L6.5 7.8 L9 10 L11.5 7.5 L13.5 9.3"/>'),
+  crop:     SVG('<path d="M5.5 1.5 V10.5 H14.5"/><path d="M1.5 5.5 H10.5 V14.5"/>'),
 };
 
 /* ---------- tool definitions & left toolbar ---------- */
@@ -923,6 +1402,7 @@ const TOOLS = [
   { id:'rect',    icon:'rect',    name:'Rectangle',  th:'สี่เหลี่ยม', hint:'ลากวาดสี่เหลี่ยม · Shift = จัตุรัส', key:'r' },
   { id:'ellipse', icon:'ellipse', name:'Ellipse',    th:'วงกลม',      hint:'ลากวาดวงกลม · Shift = วงกลมจริง', key:'o' },
   { id:'select',  icon:'select',  name:'Selection',  th:'เลือกพื้นที่', hint:'ลากเลือก · Delete ลบ · ลูกศรขยับ', key:'s' },
+  { id:'crp',     icon:'crop',    name:'Crop & Rotate', th:'ตัดและหมุน', hint:'ลากเลือกกรอบ · ลากขอบ/มุม = ปรับขนาด · กดปุ่มในแผงขวาเพื่อตัด/หมุน (Pivot ย้ายได้) · Apply รวมกลับ', key:'c' },
   { id:'move',    icon:'move',    name:'Move',       th:'ย้าย',       hint:'ลากย้ายพื้นที่เลือก/ทั้งเลเยอร์ · Alt = สำเนา', key:'v' },
   { id:'mirror',  icon:'mirror',  name:'Mirror X',   th:'มิเรอร์',    hint:'วาดสะท้อนซ้าย–ขวา (โหมด)', key:'m', toggle:true },
   { id:'refmove', icon:'image',   name:'Ref Layout', th:'จัดวางภาพอ้างอิง', hint:'ลาก = ย้ายภาพต้นแบบ · ล้อเมาส์ = ขยาย/ย่อ (ต้องปลด Lock ในแผงภาพอ้างอิงก่อน)', key:'q' },
@@ -1069,6 +1549,11 @@ ui:{
 'คัดลอกไปทิศอื่นแล้วค่อยแก้รายละเอียด':'and refine the details · press “Save as Asset” to reuse finished parts in other characters',
 'พิกัด:':'Pos:','ขนาด:':'Size:','ซูม:':'Zoom:','เลเยอร์:':'Layer:','พอดีจอ':'Fit','เวลาเฟรมนี้ (ms)':'Frame time (ms)','🚫 แสดงเฟรม':'🚫 Show frame','เฟรมถูกซ่อน — กดเพื่อแสดงอีกครั้ง':'Frame hidden — tap to show again','ซ่อนเฟรมนี้ (ไม่เล่น/ไม่ Export)':'Hide this frame (not played / not exported)',
 'เปิดหน้า Facebook ของผู้ทำเว็บ — Thiwa Thiwakron':'Open the creator’s Facebook — Thiwa Thiwakron',
+'📋 คัดลอกเลเยอร์':'📋 Copy layer','📄 วางทับ':'📄 Paste (replace)','🎨 วาดซ้อน':'🎨 Paint over',
+'คัดลอกเนื้อหาเลเยอร์นี้ไว้วางลงเลเยอร์อื่น (Ctrl+C) — ใช้ข้ามทิศทาง/ข้ามเฟรมได้':'Copy this layer’s content for pasting into another layer (Ctrl+C) — works across directions/frames',
+'วางเนื้อหาที่คัดลอกไว้ แทนที่เลเยอร์ที่เลือกทั้งหมด (Ctrl+V)':'Paste the copied content, replacing the whole selected layer (Ctrl+V)',
+'วาดเนื้อหาที่คัดลอกไว้ซ้อนบนเลเยอร์ที่เลือก — พิกเซลโปร่งใสไม่ทับของเดิม (Ctrl+Shift+V)':'Paint the copied content over the selected layer — transparent pixels keep what’s below (Ctrl+Shift+V)',
+'คัดลอกเนื้อหาเลเยอร์ปัจจุบัน / วางแทนที่เลเยอร์ที่เลือก · Ctrl+Shift+V = วาดซ้อน (พิกเซลโปร่งใสไม่ทับของเดิม) · วางข้ามทิศทาง/ข้ามเฟรมได้':'Copy the current layer / paste it replacing the selected layer · Ctrl+Shift+V = paint over (transparent pixels kept) · works across directions/frames',
 },
 m:{
 '● ยังไม่บันทึก':'● Unsaved','บันทึกแล้ว ':'Saved ','บันทึกไม่สำเร็จ!':'Save failed!',
@@ -1128,6 +1613,9 @@ m:{
 'ติดตั้งแอปเรียบร้อย 🎉 — เปิดจากไอคอนได้เลย':'Installed 🎉 — open it from its icon',
 'ติดตั้งไม่สำเร็จหรือถูกยกเลิก — ลองใหม่ผ่านเมนูของเบราว์เซอร์ได้':'Install failed or cancelled — retry from the browser menu',
 'ลบไม่สำเร็จ':'Delete failed','⏸ หยุด':'⏸ Stop',
+'เลเยอร์นี้ว่าง — วาดอะไรก่อนคัดลอก':'This layer is empty — draw something first',
+'ยังไม่มีเลเยอร์ที่คัดลอกไว้ — กด 📋 คัดลอกเลเยอร์ก่อน (Ctrl+C)':'Nothing copied yet — press 📋 Copy layer first (Ctrl+C)',
+'เลเยอร์ที่เลือกล็อกหรือซ่อนอยู่ — ปลดล็อก/เปิดก่อนวาง':'Selected layer is locked or hidden — unlock/show it before pasting',
 },
 fmt:{
 saveState:(t)=>'Saved '+t,
@@ -1152,6 +1640,9 @@ merge:(nm)=>`Merged "${nm}"`,
 layerRen:(nm)=>`Layer renamed to "${nm}"`,
 delAsset:(nm)=>`Deleted asset "${nm}"`,
 openAsset:(nm)=>`Opened "${nm}" as a new layer to edit`,
+clipCopy:(nm)=>`Layer "${nm}" copied — press Ctrl+V to paste into another layer`,
+clipPaste:(src,dst,ov)=> ov ? `Painted "${src}" over "${dst}" (transparent pixels kept)` : `Pasted "${src}" into "${dst}" (replaced)`,
+clipSizeErr:(w1,h1,w2,h2)=>`Canvas size differs (${w1}×${h1} ≠ ${w2}×${h2}) — copy again before pasting`,
 },
 tools:{
 pencil:['Pencil','Left-drag draws · right-drag erases'],
@@ -1271,6 +1762,11 @@ ui:{
 'แนะนำ: วาดทิศ':'ヒント：まず Down 方向を完成させ、','คัดลอกไปทิศอื่นแล้วค่อยแก้รายละเอียด':'で他方向へコピーしてから細部を調整・完成パーツは「アセットとして保存」で他キャラでも再利用可',
 'พิกัด:':'座標:','ขนาด:':'サイズ:','ซูม:':'ズーム:','เลเยอร์:':'レイヤー:','พอดีจอ':'画面に合せる','เวลาเฟรมนี้ (ms)':'このフレームの時間 (ms)','🚫 แสดงเฟรม':'🚫 フレーム表示','เฟรมถูกซ่อน — กดเพื่อแสดงอีกครั้ง':'フレーム非表示中 — タップで再表示','ซ่อนเฟรมนี้ (ไม่เล่น/ไม่ Export)':'このフレームを隠す（再生/書き出し対象外）',
 'เปิดหน้า Facebook ของผู้ทำเว็บ — Thiwa Thiwakron':'制作作者の Facebook を開く — Thiwa Thiwakron',
+'📋 คัดลอกเลเยอร์':'📋 レイヤーをコピー','📄 วางทับ':'📄 貼り付け（置換）','🎨 วาดซ้อน':'🎨 重ね描き',
+'คัดลอกเนื้อหาเลเยอร์นี้ไว้วางลงเลเยอร์อื่น (Ctrl+C) — ใช้ข้ามทิศทาง/ข้ามเฟรมได้':'このレイヤーの内容を他のレイヤーに貼るためにコピー (Ctrl+C) — 方向/フレームをまたいで使用可',
+'วางเนื้อหาที่คัดลอกไว้ แทนที่เลเยอร์ที่เลือกทั้งหมด (Ctrl+V)':'コピーした内容を選択中レイヤー全体に置き換え (Ctrl+V)',
+'วาดเนื้อหาที่คัดลอกไว้ซ้อนบนเลเยอร์ที่เลือก — พิกเซลโปร่งใสไม่ทับของเดิม (Ctrl+Shift+V)':'コピーした内容を選択中レイヤーに重ね描き — 透明ピクセルは下を保持 (Ctrl+Shift+V)',
+'คัดลอกเนื้อหาเลเยอร์ปัจจุบัน / วางแทนที่เลเยอร์ที่เลือก · Ctrl+Shift+V = วาดซ้อน (พิกเซลโปร่งใสไม่ทับของเดิม) · วางข้ามทิศทาง/ข้ามเฟรมได้':'現在のレイヤーをコピー / 選択中レイヤーに置き換え貼り付け · Ctrl+Shift+V = 重ね描き（透明部は保持）· 方向/フレーム越しつき',
 },
 m:{
 '● ยังไม่บันทึก':'● 未保存','บันทึกแล้ว ':'保存済み ','บันทึกไม่สำเร็จ!':'保存失敗！',
@@ -1330,6 +1826,9 @@ m:{
 'ติดตั้งแอปเรียบร้อย 🎉 — เปิดจากไอคอนได้เลย':'インストール完了 🎉 — アイコンから開く',
 'ติดตั้งไม่สำเร็จหรือถูกยกเลิก — ลองใหม่ผ่านเมนูของเบราว์เซอร์ได้':'インストール失敗/中止 — ブラウザメニューから再試行可',
 'ลบไม่สำเร็จ':'削除失敗','⏸ หยุด':'⏸ 停止',
+'เลเยอร์นี้ว่าง — วาดอะไรก่อนคัดลอก':'このレイヤーは空です — 先に描いてください',
+'ยังไม่มีเลเยอร์ที่คัดลอกไว้ — กด 📋 คัดลอกเลเยอร์ก่อน (Ctrl+C)':'コピー済みレイヤーなし — 先に 📋 レイヤーをコピー (Ctrl+C)',
+'เลเยอร์ที่เลือกล็อกหรือซ่อนอยู่ — ปลดล็อก/เปิดก่อนวาง':'選択中レイヤーはロック/非表示 — 先に解除/表示してください',
 },
 fmt:{
 saveState:(t)=>'保存済み '+t,
@@ -1354,6 +1853,9 @@ merge:(nm)=>`「${nm}」を統合しました`,
 layerRen:(nm)=>`レイヤー名を「${nm}」に変更`,
 delAsset:(nm)=>`アセット「${nm}」を削除`,
 openAsset:(nm)=>`「${nm}」を新規レイヤーとして開いて編集`,
+clipCopy:(nm)=>`レイヤー「${nm}」をコピーしました — Ctrl+V で他のレイヤーに貼り付け`,
+clipPaste:(src,dst,ov)=> ov ? `「${src}」を「${dst}」に重ね描きしました（透明部は保持）` : `「${src}」を「${dst}」に貼り付けました（置換）`,
+clipSizeErr:(w1,h1,w2,h2)=>`キャンバスサイズが不一致（${w1}×${h1} ≠ ${w2}×${h2}）— 貼り付け前に再コピー`,
 },
 tools:{
 pencil:['鉛筆','左ドラッグ描画・右ドラッグ消去'],
@@ -1473,6 +1975,11 @@ ui:{
 'แนะนำ: วาดทิศ':'提示：先完成 Down 方向，再用','คัดลอกไปทิศอื่นแล้วค่อยแก้รายละเอียด':'复制到其他方向再细化 · 完成的部件可"存为素材"供其他角色使用',
 'พิกัด:':'坐标:','ขนาด:':'大小:','ซูม:':'缩放:','เลเยอร์:':'图层:','พอดีจอ':'适合屏幕','เวลาเฟรมนี้ (ms)':'此帧时长 (ms)','🚫 แสดงเฟรม':'🚫 显示帧','เฟรมถูกซ่อน — กดเพื่อแสดงอีกครั้ง':'帧已隐藏 — 点击重新显示','ซ่อนเฟรมนี้ (ไม่เล่น/ไม่ Export)':'隐藏此帧（不播放/不导出）',
 'เปิดหน้า Facebook ของผู้ทำเว็บ — Thiwa Thiwakron':'打开制作者的 Facebook — Thiwa Thiwakron',
+'📋 คัดลอกเลเยอร์':'📋 复制图层','📄 วางทับ':'📄 粘贴（替换）','🎨 วาดซ้อน':'🎨 叠加绘制',
+'คัดลอกเนื้อหาเลเยอร์นี้ไว้วางลงเลเยอร์อื่น (Ctrl+C) — ใช้ข้ามทิศทาง/ข้ามเฟรมได้':'复制此图层内容以便粘贴到其他图层 (Ctrl+C) — 可跨方向/跨帧使用',
+'วางเนื้อหาที่คัดลอกไว้ แทนที่เลเยอร์ที่เลือกทั้งหมด (Ctrl+V)':'粘贴已复制内容，整体替换所选图层 (Ctrl+V)',
+'วาดเนื้อหาที่คัดลอกไว้ซ้อนบนเลเยอร์ที่เลือก — พิกเซลโปร่งใสไม่ทับของเดิม (Ctrl+Shift+V)':'将已复制内容叠加到所选图层 — 透明像素不覆盖原有内容 (Ctrl+Shift+V)',
+'คัดลอกเนื้อหาเลเยอร์ปัจจุบัน / วางแทนที่เลเยอร์ที่เลือก · Ctrl+Shift+V = วาดซ้อน (พิกเซลโปร่งใสไม่ทับของเดิม) · วางข้ามทิศทาง/ข้ามเฟรมได้':'复制当前图层 / 粘贴并替换所选图层 · Ctrl+Shift+V = 叠加绘制（保留透明像素）· 可跨方向/跨帧',
 },
 m:{
 '● ยังไม่บันทึก':'● 未保存','บันทึกแล้ว ':'已保存 ','บันทึกไม่สำเร็จ!':'保存失败！',
@@ -1532,6 +2039,9 @@ m:{
 'ติดตั้งแอปเรียบร้อย 🎉 — เปิดจากไอคอนได้เลย':'安装完成 🎉 — 从图标打开即可',
 'ติดตั้งไม่สำเร็จหรือถูกยกเลิก — ลองใหม่ผ่านเมนูของเบราว์เซอร์ได้':'安装失败或已取消 — 可通过浏览器菜单重试',
 'ลบไม่สำเร็จ':'删除失败','⏸ หยุด':'⏸ 停止',
+'เลเยอร์นี้ว่าง — วาดอะไรก่อนคัดลอก':'此图层为空 — 请先绘制',
+'ยังไม่มีเลเยอร์ที่คัดลอกไว้ — กด 📋 คัดลอกเลเยอร์ก่อน (Ctrl+C)':'还没有复制的图层 — 请先按 📋 复制图层 (Ctrl+C)',
+'เลเยอร์ที่เลือกล็อกหรือซ่อนอยู่ — ปลดล็อก/เปิดก่อนวาง':'所选图层已锁定或隐藏 — 请先解锁/显示再粘贴',
 },
 fmt:{
 saveState:(t)=>'已保存 '+t,
@@ -1556,6 +2066,9 @@ merge:(nm)=>`已合并"${nm}"`,
 layerRen:(nm)=>`图层已重命名为"${nm}"`,
 delAsset:(nm)=>`已删除素材"${nm}"`,
 openAsset:(nm)=>`已将"${nm}"作为新图层打开编辑`,
+clipCopy:(nm)=>`已复制图层"${nm}" — 按 Ctrl+V 粘贴到其他图层`,
+clipPaste:(src,dst,ov)=> ov ? `已将"${src}"叠加到"${dst}"（保留透明像素）` : `已将"${src}"粘贴替换"${dst}"`,
+clipSizeErr:(w1,h1,w2,h2)=>`画布大小不一致（${w1}×${h1} ≠ ${w2}×${h2}）— 请重新复制后再粘贴`,
 },
 tools:{
 pencil:['铅笔','左键绘画 · 右键擦除'],
@@ -1607,6 +2120,9 @@ merge:(nm)=>`รวม "${nm}"`,
 layerRen:(nm)=>`เปลี่ยนชื่อเลเยอร์เป็น "${nm}"`,
 delAsset:(nm)=>`ลบ Asset "${nm}"`,
 openAsset:(nm)=>`เปิด "${nm}" เป็นเลเยอร์ใหม่เพื่อแก้ไข`,
+clipCopy:(nm)=>`คัดลอกเนื้อหาเลเยอร์ "${nm}" แล้ว — กด Ctrl+V เพื่อวางลงเลเยอร์อื่น`,
+clipPaste:(src,dst,ov)=> ov ? `วาดซ้อน "${src}" บน "${dst}" แล้ว (พิกเซลโปร่งใสคงของเดิม)` : `วางทับ "${dst}" ด้วยเนื้อหา "${src}" แล้ว`,
+clipSizeErr:(w1,h1,w2,h2)=>`ขนาด Canvas ต่างกัน (${w1}×${h1} ≠ ${w2}×${h2}) — คัดลอกใหม่ก่อนวาง`,
 };
 for(const k in I18N.en.ui){ if(TH_UI[I18N.en.ui[k]]===undefined) TH_UI[I18N.en.ui[k]] = k; }
 for(const k in I18N.en.m){ if(TH_M[I18N.en.m[k]]===undefined) TH_M[I18N.en.m[k]] = k; }
@@ -1850,7 +2366,7 @@ function guardEdit(){
 /* ---------- new / load project ---------- */
 function makeProject(name, w, h, classId){
   project = { id: uid('P'), name, classId: classId || '', w, h,
-    palette: DEFAULT_PALETTE.slice(), dirs:{}, assets:[], fps:8,
+    palette: DEFAULT_PALETTE.slice(), dirs:{}, assets:[], fps:8, animMap:ammDefault(),
     created: Date.now(), updated: Date.now() };
   for(const d of DIRS) project.dirs[d] = newDirection();
   state.dir = 'down'; state.selection = null; state.palIdx = 0;
@@ -1924,6 +2440,7 @@ function serializeProject(){
            left:serDir(project.dirs.left), right:serDir(project.dirs.right) },
     assets: project.assets.map(a => ({ id:a.id, name:a.name, category:a.category,
       w:a.w, h:a.h, x:a.x, y:a.y, rle:encLayer(a.data) })),
+    animMap:ammSerialize(),
     created:project.created, updated:Date.now(),
   };
 }
@@ -1936,7 +2453,9 @@ function loadSerialized(o){
            left:deDir(o.dirs.left,o.w,o.h), right:deDir(o.dirs.right,o.w,o.h) },
     assets:(o.assets || []).map(a => ({ id:a.id || uid('A'), name:String(a.name || 'asset'),
       category:a.category || 'Other', w:a.w|0, h:a.h|0, x:a.x|0, y:a.y|0, data:decLayer(a.rle, a.w*a.h) })),
+    animMap:ammDeserialize(o.animMap),
     created:o.created || Date.now(), updated:o.updated || Date.now() };
+  if(typeof ammRenderPanel === 'function') setTimeout(ammRenderPanel, 0);
   state.dir = 'down'; state.selection = null; state.palIdx = 0; state.assetSel = null;
   overlayPixels = new Map(); floatBuf = null; pendingSnap = null; liveSel = null;
   undoStack = []; redoStack = [];
@@ -2082,6 +2601,10 @@ function blitLayers(g, layers, w, h, withOverlay){
     }
   }
   if(withOverlay){
+    /* Crop & Rotate: ตัดพิกเซลเฉพาะที่มาจากเลเยอร์ที่กำลังแก้ (พรีวิว — ข้อมูลจริงไม่เปลี่ยนจน Apply) */
+    if(typeof crpCutSet !== 'undefined' && crpCutSet && crpCutData){
+      for(const i of crpCutSet){ if(crpCutData[i]){ const o = i * 4; d[o + 3] = 0; } }
+    }
     for(const [i, v] of overlayPixels){
       const o = i * 4;
       if(v === null){ d[o+3] = 0; continue; }
@@ -2251,6 +2774,9 @@ function draw(){
     ctx.lineWidth = Math.max(1, dpr);
     ctx.strokeRect(x0 + state.hover.x*z + .5, y0 + state.hover.y*z + .5, z - 1, z - 1);
   }
+
+  /* Crop & Rotate: จุดจับกรอบ + Pivot + ด้ามหมุน (เฉพาะเครื่องมือนี้) */
+  if(state.tool === 'crp' && typeof crpDrawOverlay === 'function') crpDrawOverlay(ctx, x0, y0, z, dpr);
 }
 
 function normRect(r){
@@ -2402,6 +2928,7 @@ let refDrag = null;   /* ลากย้ายภาพอ้างอิง (�
 function selectTool(t){
   state.tool = t;
   overlayPixels = new Map(); floatBuf = null; shapeStart = null; liveSel = null; refDrag = null;
+  if(typeof crpToolReset === 'function') crpToolReset();
   $$('#leftbar .tool').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
   cv.dataset.cursor = (t === 'move' || t === 'refmove') ? 'move' : (t === 'pan' ? 'grab' : 'cross');
   const td = TOOLS.find(x => x.id === t);
@@ -2670,6 +3197,7 @@ function toolDown(c, e){
     }
     case 'select': liveSel = { x0:c.x, y0:c.y, x1:c.x, y1:c.y }; state.selection = null; break;
     case 'move': startMove(c, e.altKey); break;
+    case 'crp': crpDown(c, e); break;
     case 'refmove': {
       if(typeof refState === 'undefined' || !refState.img){ toast('ยังไม่มีภาพอ้างอิง — โหลดในแผง “ภาพอ้างอิง” ก่อน'); return; }
       if(refState.locked){ toast('ภาพอ้างอิงถูกล็อก — ปลดล็อกในแผงภาพอ้างอิงก่อน', 'err'); return; }
@@ -2704,6 +3232,7 @@ function toolMove(c, e){
       break;
     }
     case 'move': if(floatBuf) moveMove(c); break;
+    case 'crp': crpMove(c, e); break;
     case 'refmove':
       if(refDrag && typeof refState !== 'undefined' && refState.img){
         refState.x = ptr.fmx - refDrag.dx;
@@ -2742,6 +3271,7 @@ function toolUp(c, e){
       break;
     }
     case 'move': if(floatBuf) endMove(); break;
+    case 'crp': crpUp(c, e); break;
     case 'refmove':
       if(refDrag){ refDrag = null; renderRefPanel(); markDirty(); }
       break;
@@ -4114,6 +4644,29 @@ function clearLayerPx(){
   if(!L) return;
   opDir(state.dir, () => L.data.fill(null));
 }
+
+/* ---------- คัดลอก/วางเนื้อหาเลเยอร์ (ปุ่มในแผงเลเยอร์ + คีย์ลัด Ctrl+C/Ctrl+V/Ctrl+Shift+V)
+   คลิปบอร์ดระดับแอป — วางข้ามทิศทาง/ข้ามเฟรมได้ และกด Ctrl+Z เพื่อย้อนได้ ---------- */
+let layerClip = null;
+function copyLayerToClip(){
+  const L = activeLayer();
+  if(!L) return;
+  if(!L.data.some(v => v !== null)){ toast(tr('เลเยอร์นี้ว่าง — วาดอะไรก่อนคัดลอก'), 'err'); return; }
+  layerClip = { data: L.data.slice(), name: L.name, w: project.w, h: project.h };
+  toast(TF().clipCopy(L.name), 'ok');
+}
+function pasteClipToLayer(overlay){
+  const L = activeLayer();
+  if(!L) return;
+  if(!layerClip){ toast(tr('ยังไม่มีเลเยอร์ที่คัดลอกไว้ — กด 📋 คัดลอกเลเยอร์ก่อน (Ctrl+C)'), 'err'); return; }
+  if(layerClip.w !== project.w || layerClip.h !== project.h){ toast(TF().clipSizeErr(layerClip.w, layerClip.h, project.w, project.h), 'err'); return; }
+  if(L.locked || !L.visible){ toast(tr('เลเยอร์ที่เลือกล็อกหรือซ่อนอยู่ — ปลดล็อก/เปิดก่อนวาง'), 'err'); return; }
+  opDir(state.dir, () => {
+    if(!overlay){ L.data = layerClip.data.slice(); }
+    else { for(let k = 0; k < L.data.length; k++) if(layerClip.data[k] !== null) L.data[k] = layerClip.data[k]; }
+  });
+  toast(TF().clipPaste(layerClip.name, L.name, overlay), 'ok');
+}
 $('#lyAdd').addEventListener('click', () => {
   const nm = prompt('ชื่อเลเยอร์ใหม่:', 'เลเยอร์ใหม่');
   if(nm !== null) addLayerNamed(nm.trim() || undefined);
@@ -4124,6 +4677,9 @@ $('#lyUp').addEventListener('click', () => moveLayerStack(true));
 $('#lyDown').addEventListener('click', () => moveLayerStack(false));
 $('#lyMerge').addEventListener('click', mergeDownLayer);
 $('#lyClear').addEventListener('click', () => { if(confirm('ลบพิกเซลทั้งหมดในเลเยอร์นี้? (กด Ctrl+Z เพื่อย้อน)')) clearLayerPx(); });
+$('#lyCopy').addEventListener('click', copyLayerToClip);
+$('#lyPaste').addEventListener('click', () => pasteClipToLayer(false));
+$('#lyPasteOver').addEventListener('click', () => pasteClipToLayer(true));
 
 /* ---------- direction copy ---------- */
 function mirroredArr(arr){
@@ -4406,7 +4962,7 @@ function updateCharUI(){
   $('#charSize').textContent = project.w + ' × ' + project.h + ' px (ทุกทิศทาง)';
   $('#charMeta').textContent = TF().charMeta(curDir().layers.length, project.assets.length, project.palette.length);
 }
-$('#charClass').addEventListener('change', e => { project.classId = e.target.value; updateCharUI(); markDirty(); });
+$('#charClass').addEventListener('change', e => { project.classId = e.target.value; updateCharUI(); ammOnClassChange(); markDirty(); });
 $('#projName').addEventListener('input', e => {
   project.name = e.target.value.trim() || 'ตัวละคร';
   document.title = project.name + ' • — Pixel Art Character Creator';
@@ -4998,11 +5554,14 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 (function(){
   const rb = $('#rightbar'), btn = $('#btnRightbar');
   if(!rb || !btn) return;
+  /* จอใหญ่: แถบขวาเริ่มต้นเปิดอยู่ — ปุ่มเดียวกันใช้สไลด์เปิด/ปิด (เอฟเฟกต์จัดการด้วย CSS) */
+  if(window.innerWidth >= 881){ rb.classList.add('open'); btn.textContent = tr('✕ ปิดแผง'); }
   btn.addEventListener('click', () => {
     const open = rb.classList.toggle('open');
     btn.textContent = open ? tr('✕ ปิดแผง') : tr('⚙ แผงเครื่องมือ');
   });
   document.addEventListener('pointerdown', e => {
+    if(window.innerWidth >= 881) return;   /* จอใหญ่: คลิกวาดภาพนอกแผง — ไม่ปิดแผงอัตโนมัติ */
     if(rb.classList.contains('open') && !rb.contains(e.target) && !btn.contains(e.target)){
       rb.classList.remove('open');
       btn.textContent = tr('⚙ แผงเครื่องมือ');
@@ -5060,6 +5619,8 @@ document.addEventListener('keydown', e => {
     else if(k === 'y'){ e.preventDefault(); doRedo(); }
     else if(k === 's'){ e.preventDefault(); saveProject(false); }
     else if(k === 'a'){ e.preventDefault(); if(state.tool === 'select' || !inField) state.selection = { x:0, y:0, w:project.w, h:project.h }; scheduleRender(); }
+    else if(k === 'c' && !e.shiftKey){ e.preventDefault(); copyLayerToClip(); }
+    else if(k === 'v'){ e.preventDefault(); pasteClipToLayer(e.shiftKey); }
     return;
   }
   if(k === ' '){ e.preventDefault(); return; }
@@ -5117,6 +5678,2245 @@ $('#tlAnimPv').addEventListener('click', () => {
   if(animPv) animPv.el.querySelector('.fw-close').click();
   else openAnimPreview();
 });
+
+/* =========================================================
+   Part 6m: Animation Mapping (เพิ่มใหม่ — ไม่แก้ระบบเดิม)
+   ผู้ใช้เป็นคนกำหนดเองว่า Sprite/Preset แต่ละชิ้นคือท่าอะไร
+   (Idle Front / Idle Back / Walk Front / Walk Back / Attack Front)
+   และเลือกเฟรมจาก Sprite Sheet เอง — โปรแกรมเพียงจดจำ Mapping
+   และเล่นตาม ไม่เดา ไม่วิเคราะห์ภาพ ไม่แทนที่ด้วย Animation อื่น
+   - Sources = ไฟล์ภาพที่นำเข้า (sheet) หรือ Timeline ของโปรเจกต์
+   - Mapping แยกตามอาชีพ (project.classId) — สลับอาชีพ = โหลด Mapping ชุดนั้น
+   - ไม่แก้ Sprite ต้นฉบับ ไม่แก้ Timeline เดิม ข้อมูลอยู่ในโปรเจกต์เดิม
+========================================================= */
+/* =========================================================
+   Part 5c: Crop & Rotate tool — ตัด/เลือก/หมุนส่วนของ Sprite
+   - กรอบเลือกบน Canvas: ลากสร้าง · ลากขอบ/มุม = ปรับขนาด · ลากในกรอบ = ย้าย
+   - Crop = ตัดพื้นที่ที่เลือกเป็น "ชิ้นส่วนลอย" (โหมดพรีวิว)
+     พรีวิวทำผ่าน overlayPixels + crpCutSet เท่านั้น — ข้อมูลเลเยอร์
+     (ไฟล์จริง) ไม่ถูกแตะจนกด Apply · Cancel กลับสภาพเดิมทันที
+   - หมุน: Pivot ย้ายได้ (หัวไหล่/มือ/เอว/คอ) · ด้ามหมุนลากด้วยเมาส์ ·
+     องศาใส่เองได้ · ±90 · ±5/10/15 · Reset
+   - Pixel Art Rotation = Nearest Neighbor แบบ inverse mapping:
+     ไม่มี anti-aliasing ไม่มีสีผสม/สีเทา cos+sin snap ทำให้ 0/90/180/270
+     แม่นยำเป๊ะ สีและความโปร่งใสคงเดิมทุกพิกเซล
+   - Apply = เข้าระบบ Undo/Redo เดิม (pushUndo) · แก้เฉพาะเฟรม/เลเยอร์ที่
+     กำลังแก้ · ขนาด Canvas ไม่เปลี่ยน · พิกเซลที่หมุนหลุดนอกขอบจะแจ้งเตือน
+========================================================= */
+let crpFloat = null;      /* ชิ้นส่วนที่ตัดออก {buf,w,h,r,deg,pivot,off,key,sig,srcCount} */
+let crpRot = null;        /* ผลหมุนล่าสุด (cache) {buf,w,h,ox,oy,clipped,placed,srcCount} */
+let crpCutSet = null;     /* Set(index) พื้นที่ที่ตัด — blitLayers ใช้ตัดเฉพาะเลเยอร์ที่กำลังแก้ */
+let crpCutData = null;    /* อ้างอิง data ของเลเยอร์ที่ตัด ณ ตอนตัด (สำหรับ blitLayers) */
+let crpPendPivot = null;  /* pivot ที่ตั้งไว้ก่อน Crop (ครั้งถัดไปจะใช้ค่านี้) */
+let crpDrag = null;       /* สถานะลากปัจจุบัน */
+
+function crpFrameKey(){ const D = curDir(); return state.dir + ':' + D._ci; }
+function crpSig(L, r){
+  let s = r.x + ',' + r.y + ',' + r.w + ',' + r.h + '|';
+  for(let y = 0; y < r.h; y++) for(let x = 0; x < r.w; x++){
+    const wx = r.x + x, wy = r.y + y;
+    s += (inBounds(wx, wy, project.w, project.h) ? L.data[wy * project.w + wx] : null) + ';';
+  }
+  return s;
+}
+function crpDiscard(){
+  crpFloat = null; crpRot = null; crpCutSet = null; crpCutData = null;
+  overlayPixels = new Map();
+}
+function crpToolReset(){
+  /* เปลี่ยนเครื่องมือ → เก็บกวาดโหมดพรีวิว (กรอบเลือกคงเดิม) */
+  crpDrag = null;
+  if(crpFloat) crpDiscard();
+}
+function crpCancel(){ crpDiscard(); scheduleRender(); crpSync(); }
+function crpSync(){
+  /* ตรวจความถูกต้องทุกเฟรม — กรอบ/เฟรม/ทิศเปลี่ยน = ยกเลิกพรีวิวอัตโนมัติ */
+  if(crpFloat){
+    let ok = !!state.selection;
+    if(ok){
+      const s = state.selection;
+      ok = s.x === crpFloat.r.x && s.y === crpFloat.r.y && s.w === crpFloat.r.w && s.h === crpFloat.r.h &&
+           crpFrameKey() === crpFloat.key;
+    }
+    if(!ok) crpDiscard();
+  }
+  crpPanelSync();
+}
+
+/* ---------- หมุนแบบ Nearest Neighbor (inverse mapping, ไม่มี anti-aliasing) ---------- */
+function crpSnap01(v){ return Math.abs(v) < 1e-9 ? 0 : (v > 0 ? 1 : -1); }
+function crpRotate(f){
+  const rad = f.deg * Math.PI / 180;
+  let cs = Math.cos(rad), sn = Math.sin(rad);
+  if(Math.abs(Math.abs(cs) - 1) < 1e-9) cs = crpSnap01(cs);
+  else if(Math.abs(cs) < 1e-9) cs = 0;
+  if(Math.abs(Math.abs(sn) - 1) < 1e-9) sn = crpSnap01(sn);
+  else if(Math.abs(sn) < 1e-9) sn = 0;
+  const px = f.pivot.x, py = f.pivot.y, r = f.r;
+  /* กรอบปลายทาง = bbox ของมุมกรอบต้นฉบับหลังหมุนรอบ Pivot */
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  const pts = [[r.x, r.y], [r.x + r.w, r.y], [r.x, r.y + r.h], [r.x + r.w, r.y + r.h]];
+  for(const [cx, cy] of pts){
+    const dx = cx - px, dy = cy - py;
+    const X = px + dx * cs - dy * sn, Y = py + dx * sn + dy * cs;
+    if(X < minX) minX = X; if(X > maxX) maxX = X;
+    if(Y < minY) minY = Y; if(Y > maxY) maxY = Y;
+  }
+  const ox = Math.floor(minX), oy = Math.floor(minY);
+  const dw = Math.max(1, Math.ceil(maxX) - ox), dh = Math.max(1, Math.ceil(maxY) - oy);
+  const out = new Array(dw * dh).fill(null);
+  let placed = 0;
+  for(let y = 0; y < dh; y++) for(let x = 0; x < dw; x++){
+    const fx = ox + f.off.x + x + .5, fy = oy + f.off.y + y + .5;   /* พิกเซลเป้าหมาย (center) */
+    const rx = fx - px, ry = fy - py;
+    const sx = px + rx * cs + ry * sn;                               /* inverse rotate R(−θ) */
+    const sy = py - rx * sn + ry * cs;
+    const bx = Math.floor(sx - r.x), by = Math.floor(sy - r.y);
+    if(bx >= 0 && bx < f.w && by >= 0 && by < f.h){
+      const v = f.buf[by * f.w + bx];
+      if(v){ out[y * dw + x] = v; placed++; }
+    }
+  }
+  /* นับพิกเซลต้นฉบับที่หมุนแล้วหลุดนอกขอบ Canvas (เพื่อแจ้งผู้ใช้ ไม่ตัดเงียบ ๆ) */
+  let clipped = 0;
+  for(let by = 0; by < f.h; by++) for(let bx = 0; bx < f.w; bx++){
+    if(!f.buf[by * f.w + bx]) continue;
+    const fx = r.x + bx + .5 - px, fy = r.y + by + .5 - py;
+    const X = px + fx * cs - fy * sn + f.off.x, Y = py + fx * sn + fy * cs + f.off.y;
+    if(X < 0 || Y < 0 || X >= project.w || Y >= project.h) clipped++;
+  }
+  return { buf: out, w: dw, h: dh, ox, oy, clipped, placed, srcCount: f.srcCount };
+}
+function crpRebuild(){
+  if(!crpFloat){ crpRot = null; crpCutSet = null; crpCutData = null; overlayPixels = new Map(); return; }
+  const f = crpFloat, rot = crpRotate(f);
+  crpRot = rot;
+  crpCutSet = new Set();
+  crpCutData = crpFloat.data;
+  const W = project.w, H = project.h;
+  for(let y = 0; y < f.h; y++) for(let x = 0; x < f.w; x++){
+    const wx = f.r.x + x, wy = f.r.y + y;
+    if(wx >= 0 && wy >= 0 && wx < W && wy < H) crpCutSet.add(wy * W + wx);
+  }
+  const map = new Map();
+  for(let y = 0; y < rot.h; y++) for(let x = 0; x < rot.w; x++){
+    const v = rot.buf[y * rot.w + x];
+    if(!v) continue;
+    const wx = rot.ox + f.off.x + x, wy = rot.oy + f.off.y + y;
+    if(wx >= 0 && wy >= 0 && wx < W && wy < H) map.set(wy * W + wx, v);
+  }
+  overlayPixels = map;
+}
+
+/* ---------- Crop (ตัดออกเป็นชิ้นส่วน — โหมดพรีวิว) ---------- */
+function crpExtract(){
+  if(!project) return false;
+  if(!state.selection){ toast('ลากเลือกพื้นที่บน Canvas ก่อน (เครื่องมือ ✂ Crop & Rotate — ปุ่ม C)', 'err'); return false; }
+  const L = guardEdit(); if(!L) return false;
+  const W = project.w, H = project.h;
+  const r = { x: clamp(state.selection.x, 0, W - 1), y: clamp(state.selection.y, 0, H - 1),
+              w: state.selection.w, h: state.selection.h };
+  r.w = Math.max(1, Math.min(r.w, W - r.x)); r.h = Math.max(1, Math.min(r.h, H - r.y));
+  state.selection = { ...r };
+  const buf = regionBuf(L, r);
+  let srcCount = 0;
+  for(const v of buf) if(v) srcCount++;
+  const pend = crpPendPivot;
+  crpFloat = { buf, w: r.w, h: r.h, r, deg: 0,
+    pivot: pend ? { ...pend } : { x: r.x + r.w / 2, y: r.y + r.h / 2 },
+    off: { x: 0, y: 0 }, key: crpFrameKey(), sig: crpSig(L, r), srcCount, data: L.data };
+  crpPendPivot = null;
+  crpRebuild();
+  crpSync(); scheduleRender();
+  return true;
+}
+function crpEnsureFloat(){
+  if(crpFloat) return true;
+  return crpExtract();
+}
+
+/* ---------- การกระทำจากแผงควบคุม ---------- */
+function crpAdjustDeg(d){
+  if(!crpEnsureFloat()) return;
+  crpFloat.deg = clamp(crpFloat.deg + d, -360, 360);
+  crpRebuild(); crpSync(); scheduleRender();
+}
+function crpSetDeg(d){
+  if(!crpEnsureFloat()) return;
+  crpFloat.deg = clamp(d, -360, 360);
+  crpRebuild(); crpSync(); scheduleRender();
+}
+function crpResetDeg(){
+  if(!crpFloat){ toast('ยังไม่มีชิ้นส่วน — กดปุ่มหมุน/Crop ก่อน'); return; }
+  crpFloat.deg = 0;
+  crpRebuild(); crpSync(); scheduleRender();
+}
+function crpSetPivot(x, y, fromUser){
+  if(!crpEnsureFloat()) return;
+  crpFloat.pivot = { x: clamp(x, 0, project.w), y: clamp(y, 0, project.h) };
+  crpRebuild(); crpSync(); scheduleRender();
+}
+function crpPivotCenter(){
+  if(!crpEnsureFloat()) return;
+  const r = crpFloat.r;
+  crpFloat.pivot = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+  crpRebuild(); crpSync(); scheduleRender();
+}
+function crpSelectAll(){
+  if(!project) return;
+  if(crpFloat) crpDiscard();
+  state.selection = { x: 0, y: 0, w: project.w, h: project.h };
+  crpPendPivot = null;
+  crpSync(); scheduleRender();
+}
+function crpClearSel(){
+  state.selection = null;
+  if(crpFloat) crpDiscard();
+  crpSync(); scheduleRender();
+}
+function crpApply(){
+  if(!crpFloat){ toast('ยังไม่มีชิ้นส่วน — เลือกพื้นที่แล้วกดหมุน/Crop ก่อน', 'err'); return; }
+  const L = guardEdit(); if(!L) return;
+  if(crpSig(L, crpFloat.r) !== crpFloat.sig){
+    crpCancel();
+    toast('ข้อมูลในพื้นที่ที่เลือกเปลี่ยนไปตอนพรีวิว — ยกเลิกการหมุนเพื่อกันข้อมูลเสียหาย', 'err');
+    return;
+  }
+  const f = crpFloat, rot = crpRot || crpRotate(f);
+  const W = project.w, H = project.h;
+  const before = snapDir(state.dir);
+  /* 1) ตัดพื้นที่กรอบเดิมออกจากเลเยอร์จริง 2) วางชิ้นส่วนที่หมุนแล้วกลับ */
+  cutRegion(L, f.r);
+  for(let y = 0; y < rot.h; y++) for(let x = 0; x < rot.w; x++){
+    const v = rot.buf[y * rot.w + x];
+    if(!v) continue;
+    const wx = rot.ox + f.off.x + x, wy = rot.oy + f.off.y + y;
+    if(wx >= 0 && wy >= 0 && wx < W && wy < H) L.data[wy * W + wx] = v;
+  }
+  pushUndo(state.dir, before, snapDir(state.dir));
+  const clip = rot.clipped, over = Math.max(0, rot.srcCount - rot.placed - clip);
+  const wasDeg = Math.round(f.deg * 10) / 10;
+  crpDiscard();
+  state.selection = null;
+  crpSync(); scheduleRender(); markDirty();
+  let msg = 'รวมชิ้นส่วนกลับเข้า Sprite แล้ว (หมุน ' + wasDeg + '° · Undo ได้)';
+  if(clip) msg += ' · ⚠ มี ' + clip + ' พิกเซลหมุนหลุดนอกขอบ Canvas จึงถูกตัด (แจ้งล่วงหน้าในแผง Crop & Rotate)';
+  if(over) msg += ' · ' + over + ' พิกเซลวางทับกันจากการหมุนแบบ Nearest Neighbor';
+  toast(msg, clip ? 'err' : 'ok');
+}
+function crpCancelBtn(){
+  if(!crpFloat){ toast('ยังไม่มีชิ้นส่วนที่ตัดออก — ไม่มีอะไรให้ยกเลิก'); return; }
+  crpCancel();
+  toast('ยกเลิกแล้ว — ภาพกลับสู่สภาพเดิม (ไม่มีการแก้ไขค้าง)', 'ok');
+}
+
+/* ---------- จุดจับบนกรอบ (handles) ---------- */
+function crpHandles(s){
+  const cx = s.x + s.w / 2, cy = s.y + s.h / 2;
+  return [
+    { id:'nw', x:s.x,       y:s.y },       { id:'n',  x:cx,        y:s.y },
+    { id:'ne', x:s.x + s.w, y:s.y },       { id:'e',  x:s.x + s.w, y:cy },
+    { id:'se', x:s.x + s.w, y:s.y + s.h }, { id:'s',  x:cx,        y:s.y + s.h },
+    { id:'sw', x:s.x,       y:s.y + s.h }, { id:'w',  x:s.x,       y:cy },
+  ];
+}
+function crpHandleAt(s, fx, fy, z){
+  const rad = Math.min(Math.max(9 / z, 0.45), Math.max(s.w, s.h) / 2);
+  let best = null, bd = Infinity;
+  for(const h of crpHandles(s)){
+    const d = Math.hypot(fx - h.x, fy - h.y);
+    if(d <= rad && d < bd){ bd = d; best = h; }
+  }
+  return best;
+}
+function crpKnobPos(){
+  const f = crpFloat, z = state.zoom;
+  const rad = f.deg * Math.PI / 180;
+  const R = 34 / z;                                /* ระยะด้ามหมุน ~34px บนจอ */
+  const dir = rad - Math.PI / 2;                   /* เริ่มจากด้านบนของ Pivot */
+  return { x: f.pivot.x + Math.cos(dir) * R, y: f.pivot.y + Math.sin(dir) * R };
+}
+function crpCursorFor(h){
+  cv.dataset.cursor = (h === 'nw' || h === 'se') ? 'crp-nwse' : (h === 'ne' || h === 'sw') ? 'crp-nesw'
+    : (h === 'n' || h === 's') ? 'crp-ns' : 'crp-ew';
+}
+const CRP_CURSORS = { nw:'crp-nwse', se:'crp-nwse', ne:'crp-nesw', sw:'crp-nesw', n:'crp-ns', s:'crp-ns', e:'crp-ew', w:'crp-ew' };
+
+/* ---------- dispatch จาก toolDown/Move/Up (เครื่องมือ crp) ---------- */
+function crpDown(c, e){
+  crpSync();
+  if(e.button === 2){
+    if(crpFloat) crpCancel();
+    else { state.selection = null; scheduleRender(); }
+    return;
+  }
+  const fx = ptr.fmx, fy = ptr.fmy, z = state.zoom;
+  if(state.selection){
+    const s = state.selection;
+    if(crpFloat){
+      const knob = crpKnobPos();
+      const hr = Math.max(9 / z, 0.45);
+      if(Math.hypot(fx - knob.x, fy - knob.y) <= hr + 1.5 / z){
+        crpDrag = { mode:'rot', deg0: crpFloat.deg, a0: Math.atan2(fy - crpFloat.pivot.y, fx - crpFloat.pivot.x) };
+        cv.dataset.cursor = 'crp-rot'; return;
+      }
+      if(Math.hypot(fx - crpFloat.pivot.x, fy - crpFloat.pivot.y) <= hr){
+        crpDrag = { mode:'pivot' }; cv.dataset.cursor = 'crp-pivot'; return;
+      }
+    }
+    const h = crpHandleAt(s, fx, fy, z);
+    if(h){
+      if(crpFloat) crpDiscard();           /* ปรับกรอบระหว่างพรีวิว = เก็บชิ้นส่วนกลับก่อน */
+      crpDrag = { mode:'resize', hnd:h.id, start:{ ...s } };
+      crpCursorFor(h.id); return;
+    }
+    if(fx >= s.x && fx < s.x + s.w && fy >= s.y && fy < s.y + s.h){
+      if(crpFloat) crpDrag = { mode:'piece', off0:{ ...crpFloat.off }, c0:{ ...c } };
+      else crpDrag = { mode:'sel', start:{ ...s }, c0:{ ...c } };
+      cv.dataset.cursor = 'crp-move'; return;
+    }
+  }
+  /* คลิกนอกกรอบ = เริ่มลากกรอบใหม่ (ตัดชิ้นส่วนที่ค้างออกก่อน) */
+  if(crpFloat) crpDiscard();
+  crpDrag = { mode:'new', c0:{ ...c } };
+  liveSel = { x0:c.x, y0:c.y, x1:c.x, y1:c.y };
+  state.selection = null;
+  scheduleRender();
+}
+function crpMove(c, e){
+  if(!crpDrag){
+    /* โหมด hover — อัปเดตเคอร์เซอร์ตามจุดที่ชี้ */
+    if(state.tool !== 'crp') return;
+    crpSync();
+    let cur = 'cross';
+    if(state.selection){
+      const s = state.selection, fx = ptr.fmx, fy = ptr.fmy, z = state.zoom;
+      if(crpFloat){
+        const knob = crpKnobPos(), hr = Math.max(9 / z, 0.45);
+        if(Math.hypot(fx - knob.x, fy - knob.y) <= hr + 1.5 / z) cur = 'crp-rot';
+        else if(Math.hypot(fx - crpFloat.pivot.x, fy - crpFloat.pivot.y) <= hr) cur = 'crp-pivot';
+      }
+      if(cur === 'cross'){
+        const h = crpHandleAt(s, fx, fy, z);
+        if(h) cur = CRP_CURSORS[h.id];
+        else if(fx >= s.x && fx < s.x + s.w && fy >= s.y && fy < s.y + s.h) cur = 'crp-move';
+      }
+    }
+    cv.dataset.cursor = cur;
+    return;
+  }
+  const d = crpDrag, W = project.w, H = project.h;
+  if(d.mode === 'new'){
+    liveSel = { x0:d.c0.x, y0:d.c0.y, x1:c.x, y1:c.y };
+    scheduleRender();
+  } else if(d.mode === 'sel'){
+    const dx = c.x - d.c0.x, dy = c.y - d.c0.y;
+    state.selection = { x: clamp(d.start.x + dx, 0, W - d.start.w), y: clamp(d.start.y + dy, 0, H - d.start.h),
+                        w: d.start.w, h: d.start.h };
+    scheduleRender();
+  } else if(d.mode === 'resize'){
+    const hx = clamp(c.x, 0, W - 1), hy = clamp(c.y, 0, H - 1);
+    let x0 = d.start.x, y0 = d.start.y, x1 = d.start.x + d.start.w - 1, y1 = d.start.y + d.start.h - 1;
+    if(d.hnd.indexOf('w') >= 0) x0 = Math.min(hx, x1);
+    if(d.hnd.indexOf('e') >= 0) x1 = Math.max(hx, x0);
+    if(d.hnd.indexOf('n') >= 0) y0 = Math.min(hy, y1);
+    if(d.hnd.indexOf('s') >= 0) y1 = Math.max(hy, y0);
+    state.selection = normRect({ x0, y0, x1, y1 });
+    scheduleRender();
+  } else if(d.mode === 'piece'){
+    crpFloat.off = { x: clamp(d.off0.x + (c.x - d.c0.x), -(W + H), W + H),
+                     y: clamp(d.off0.y + (c.y - d.c0.y), -(W + H), W + H) };
+    crpRebuild(); scheduleRender();
+  } else if(d.mode === 'pivot'){
+    crpFloat.pivot = { x: clamp(ptr.fmx, 0, W), y: clamp(ptr.fmy, 0, H) };
+    crpRebuild(); scheduleRender();
+  } else if(d.mode === 'rot'){
+    const a = Math.atan2(ptr.fmy - crpFloat.pivot.y, ptr.fmx - crpFloat.pivot.x);
+    let deg = d.deg0 + (a - d.a0) * 180 / Math.PI;
+    deg = ((deg % 360) + 360) % 360; if(deg > 180) deg -= 360;
+    crpFloat.deg = clamp(Math.round(deg), -360, 360);
+    crpRebuild(); scheduleRender();
+  }
+}
+function crpUp(c, e){
+  const d = crpDrag;
+  crpDrag = null;
+  cv.dataset.cursor = 'cross';
+  if(!d) return;
+  if(d.mode === 'new'){
+    const s = normRect(liveSel || { x0:c.x, y0:c.y, x1:c.x, y1:c.y });
+    liveSel = null;
+    state.selection = s;
+    $('#stHint').textContent = 'เลือกพื้นที่ ' + s.w + '×' + s.h + ' ที่ (' + s.x + ',' + s.y + ') — กดปุ่มหมุน/Crop เพื่อตัดออก · Esc = ยกเลิกกรอบ';
+  }
+  crpSync(); scheduleRender();
+}
+
+/* ---------- วาดจุดจับ/ด้ามหมุน/Pivot บน Canvas (เรียกจาก draw) ---------- */
+function crpDrawOverlay(ctx, x0, y0, z, dpr){
+  crpSync();
+  if(!state.selection) return;
+  const s = state.selection;
+  /* จุดจับ 8 ตำแหน่ง */
+  const hs = 4.5 * dpr;
+  for(const h of crpHandles(s)){
+    const hx = x0 + h.x * z, hy = y0 + h.y * z;
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#3e63dd';
+    ctx.lineWidth = Math.max(1, dpr);
+    ctx.beginPath();
+    ctx.rect(hx - hs, hy - hs, hs * 2, hs * 2);
+    ctx.fill(); ctx.stroke();
+  }
+  if(!crpFloat) return;
+  const f = crpFloat;
+  /* กรอบปลายทางของชิ้นส่วน (หลังหมุน + ย้าย) */
+  if(crpRot){
+    const bx = x0 + (crpRot.ox + f.off.x) * z, by = y0 + (crpRot.oy + f.off.y) * z;
+    ctx.strokeStyle = '#0e8f9e';
+    ctx.lineWidth = Math.max(1, dpr);
+    ctx.setLineDash([4 * dpr, 3 * dpr]);
+    ctx.strokeRect(bx + .5, by + .5, crpRot.w * z - 1, crpRot.h * z - 1);
+    ctx.setLineDash([]);
+  }
+  /* Pivot ✛ */
+  const pvx = x0 + f.pivot.x * z, pvy = y0 + f.pivot.y * z, arm = 5.5 * dpr;
+  ctx.strokeStyle = '#d64545';
+  ctx.lineWidth = Math.max(1.4, dpr);
+  ctx.beginPath();
+  ctx.moveTo(pvx - arm, pvy); ctx.lineTo(pvx + arm, pvy);
+  ctx.moveTo(pvx, pvy - arm); ctx.lineTo(pvx, pvy + arm);
+  ctx.stroke();
+  ctx.beginPath(); ctx.arc(pvx, pvy, 2.6 * dpr, 0, Math.PI * 2); ctx.stroke();
+  /* ด้ามหมุน ↻ */
+  const knob = crpKnobPos();
+  const kx = x0 + knob.x * z, ky = y0 + knob.y * z;
+  ctx.strokeStyle = '#d64545';
+  ctx.setLineDash([2 * dpr, 2 * dpr]);
+  ctx.beginPath(); ctx.moveTo(pvx, pvy); ctx.lineTo(kx, ky); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#d64545';
+  ctx.beginPath(); ctx.arc(kx, ky, 4 * dpr, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.arc(kx, ky, 1.6 * dpr, 0, Math.PI * 2); ctx.fill();
+  /* ป้ายองศา */
+  const label = Math.round(f.deg * 10) / 10 + '°';
+  ctx.font = (10 * dpr) + 'px sans-serif';
+  const tw = ctx.measureText(label).width;
+  ctx.fillStyle = 'rgba(214,69,69,0.92)';
+  ctx.fillRect(kx + 6 * dpr, ky - 14 * dpr, tw + 6 * dpr, 13 * dpr);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(label, kx + 9 * dpr, ky - 3.5 * dpr);
+}
+
+/* ---------- แผงควบคุม ---------- */
+function crpPanelSync(){
+  const info = $('#crpInfo');
+  if(!info) return;
+  const degIn = $('#crpDeg'), pvx = $('#crpPvx'), pvy = $('#crpPvy'), lb = $('#crpDegLb');
+  if(crpFloat){
+    const f = crpFloat;
+    if(degIn.value !== String(Math.round(f.deg))) degIn.value = Math.round(f.deg);
+    degIn.disabled = false; lb.textContent = (Math.round(f.deg * 10) / 10) + '°';
+    const pvxv = String(Math.round(f.pivot.x * 10) / 10), pvyv = String(Math.round(f.pivot.y * 10) / 10);
+    if(document.activeElement !== pvx && pvx.value !== pvxv) pvx.value = pvxv;
+    if(document.activeElement !== pvy && pvy.value !== pvyv) pvy.value = pvyv;
+    pvx.disabled = false; pvy.disabled = false;
+    let t = 'กรอบ ' + f.r.w + '×' + f.r.h + ' ที่ (' + f.r.x + ',' + f.r.y + ') · ชิ้นส่วน ' + Math.round(f.deg * 10) / 10 +
+      '° · Pivot (' + (Math.round(f.pivot.x * 10) / 10) + ',' + (Math.round(f.pivot.y * 10) / 10) + ')' +
+      ' · ลากชิ้นส่วน/จุดจับได้ · ยังไม่รวม — กด Apply เพื่อยืนยัน หรือ Cancel เพื่อยกเลิก';
+    if(crpRot){
+      if(crpRot.clipped) t += ' · ⚠ หมุนแล้วมี ' + crpRot.clipped + ' พิกเซลหลุดนอกขอบ Canvas (จะถูกตัดตอน Apply)';
+      const over = Math.max(0, crpRot.srcCount - crpRot.placed - crpRot.clipped);
+      if(over) t += ' · ' + over + ' พิกเซลวางซ้อนกัน (NN)';
+    }
+    info.textContent = t;
+    info.classList.toggle('warn', !!(crpRot && crpRot.clipped));
+  } else {
+    degIn.value = '0'; degIn.disabled = !state.selection;
+    lb.textContent = '0°';
+    pvx.value = ''; pvy.value = '';
+    pvx.disabled = !state.selection; pvy.disabled = !state.selection;
+    info.classList.remove('warn');
+    info.textContent = state.selection
+      ? 'กรอบ ' + state.selection.w + '×' + state.selection.h + ' ที่ (' + state.selection.x + ',' + state.selection.y +
+        ') — กดหมุน/Crop เพื่อตัดชิ้นส่วนออก (พรีวิว) · Pivot ที่ตั้งไว้ตอนนี้จะใช้กับการตัดครั้งถัดไป'
+      : 'ยังไม่มีกรอบ — ลากบน Canvas เพื่อเลือกพื้นที่ (เครื่องมือ ✂ Crop & Rotate ปุ่ม C) · รองรับพิกเซลโปร่งใสและภาพ 32×32 / 64×64';
+  }
+}
+function crpWirePanel(){
+  const on = (id, ev, fn) => { const el = $(id); if(el) el.addEventListener(ev, fn); };
+  on('#crpSelAll', 'click', () => { crpSelectAll(); toast('เลือกทั้งภาพแล้ว (' + project.w + '×' + project.h + ') — กดปุ่มหมุน/Crop เพื่อตัดออก'); });
+  on('#crpClear', 'click', () => crpClearSel());
+  on('#crpCrop', 'click', () => crpExtract());
+  on('#crpL90', 'click', () => crpAdjustDeg(-90));
+  on('#crpR90', 'click', () => crpAdjustDeg(90));
+  on('#crpReset', 'click', () => crpResetDeg());
+  on('#crpApply', 'click', () => crpApply());
+  on('#crpCancel', 'click', () => crpCancelBtn());
+  on('#crpPvC', 'click', () => crpPivotCenter());
+  on('#crpDeg', 'change', () => { const v = parseFloat($('#crpDeg').value); if(!isNaN(v)) crpSetDeg(v); });
+  $$('#secCrp .crp-grid button').forEach(b => b.addEventListener('click', () => crpAdjustDeg(parseFloat(b.dataset.d))));
+  on('#crpPvx', 'change', () => { const v = parseFloat($('#crpPvx').value); if(!isNaN(v)){
+    if(crpFloat) crpSetPivot(v, crpFloat.pivot.y);
+    else if(state.selection) crpPendPivot = { x: clamp(v, 0, project.w), y: crpPendPivot ? crpPendPivot.y : state.selection.y + state.selection.h / 2 };
+    crpSync(); } });
+  on('#crpPvy', 'change', () => { const v = parseFloat($('#crpPvy').value); if(!isNaN(v)){
+    if(crpFloat) crpSetPivot(crpFloat.pivot.x, v);
+    else if(state.selection) crpPendPivot = { x: crpPendPivot ? crpPendPivot.x : state.selection.x + state.selection.w / 2, y: clamp(v, 0, project.h) };
+    crpSync(); } });
+}
+crpWirePanel();
+
+const AMM_TYPES = [
+  { id:'walkFront',   group:'movement', label:'Walk Front',  th:'เดินหันหน้า' },
+  { id:'walkBack',    group:'movement', label:'Walk Back',   th:'เดินหันหลัง' },
+  { id:'idleFront',   group:'idle',     label:'Idle Front',  th:'ยืนหันหน้า' },
+  { id:'idleBack',    group:'idle',     label:'Idle Back',   th:'ยืนหันหลัง' },
+  { id:'attackFront', group:'combat',   label:'Attack Front',th:'โจมตีด้านหน้า' },
+  { id:'attackBack',  group:'combat',   label:'Attack Back', th:'โจมตีด้านหลัง' },
+];
+const AMM_GROUPS = [
+  { id:'movement', th:'Movement · การเคลื่อนที่' },
+  { id:'idle',     th:'Idle · การยืน' },
+  { id:'combat',   th:'Combat · การโจมตี' },
+];
+const AMM_TYPE_TH = t => (AMM_TYPES.find(x => x.id === t) || {}).label || t;
+let ammImgs = new Map();          /* sourceId → {img, ok} โหลดจาก dataURL */
+let ammFrameCache = new Map();    /* sheet frame canvas cache */
+let ammRev = 0;                   /* เปลี่ยนทุกครั้งที่ Mapping/ภาพเปลี่ยน → invalidate cache */
+let ammEd = null;                 /* สถานะหน้าต่างกำหนดเฟรม */
+let ammPlay = {};                 /* type → true = กำลังเล่นพรีวิวในแผง */
+let ammLastPanelClass = null;
+
+function ammDefault(){
+  return { sources:[], classes:{} };
+}
+function ammEnsure(){
+  if(!project.animMap || typeof project.animMap !== 'object') project.animMap = ammDefault();
+  if(!Array.isArray(project.animMap.sources)) project.animMap.sources = [];
+  if(typeof project.animMap.classes !== 'object' || !project.animMap.classes) project.animMap.classes = {};
+  return project.animMap;
+}
+function ammCid(){ return project.classId || ''; }
+function ammClassMap(cid){
+  ammEnsure();
+  const k = cid === undefined ? ammCid() : cid;
+  if(!project.animMap.classes[k]) project.animMap.classes[k] =
+    { idleFront:null, idleBack:null, walkFront:null, walkBack:null, attackFront:null, attackBack:null };
+  const m = project.animMap.classes[k];
+  for(const t of AMM_TYPES) if(!m[t.id] || typeof m[t.id] !== 'object') m[t.id] = null;
+  return m;
+}
+function ammGet(type, cid){
+  const m = ammClassMap(cid);
+  const a = m[type] || null;
+  if(!a) return null;
+  const s = ammSource(a.sourceId);
+  if(!s){ return null; }          /* source ถูกลบ → ถือว่ายังไม่กำหนด (ผู้ใช้ต้องกำหนดใหม่) */
+  if(s.kind === 'timeline' && !project.dirs[s.dir]) return null;
+  return a;
+}
+function ammSource(id){
+  return ammEnsure().sources.find(s => s.id === id) || null;
+}
+function ammSourcesOf(cid){
+  return ammEnsure().sources.filter(s => (s.classId || '') === (cid === undefined ? ammCid() : cid));
+}
+function ammInvalidate(){
+  ammRev++;
+  ammFrameCache.clear();
+}
+/* ---------- นำเข้า Sprite (ไฟล์ภาพ) — เก็บ dataURL เหมือนระบบภาพอ้างอิงเดิม ---------- */
+function ammImportDataURL(name, dataURL, natW, natH){
+  ammEnsure();
+  const s = { id:uid('S'), name:String(name || 'sprite'), kind:'sheet',
+    classId:ammCid(), natW:natW | 0, natH:natH | 0, src:dataURL };
+  project.animMap.sources.push(s);
+  ammGetImg(s);
+  ammInvalidate(); markDirty();
+  return s;
+}
+function ammLoadSheetFile(file){
+  if(!file) return;
+  if(!/^(image\/(png|jpeg|jpg|webp|gif|bmp))/.test(file.type)){ toast('รองรับไฟล์ภาพ PNG / JPG / WEBP / GIF เท่านั้น', 'err'); return; }
+  const rd = new FileReader();
+  rd.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const s = ammImportDataURL(file.name, rd.result, img.naturalWidth || img.width, img.naturalHeight || img.height);
+      toast(`เพิ่ม Sprite "${s.name}" (${s.natW}×${s.natH}) เป็นแหล่ง Animation ของอาชีพ ${ammCid() || 'ไม่ระบุ'} แล้ว — เลือกเฟรมได้ในแผง Animation Mapping`, 'ok');
+      ammRenderPanel();
+      if(ammEd) ammEdRenderAll();
+    };
+    img.onerror = () => toast('อ่านไฟล์ภาพไม่สำเร็จ (ไฟล์อาจเสียหาย)', 'err');
+    img.src = rd.result;
+  };
+  rd.onerror = () => toast('อ่านไฟล์ไม่สำเร็จ', 'err');
+  rd.readAsDataURL(file);
+}
+function ammAddTimelineSource(dir){
+  ammEnsure();
+  if(!DIRS.includes(dir)) return null;
+  const exists = project.animMap.sources.find(s => s.kind === 'timeline' && s.dir === dir && (s.classId || '') === ammCid());
+  if(exists) return exists;
+  const s = { id:uid('S'), name:'Timeline ของโปรเจกต์ · ทิศ ' + dir.toUpperCase(), kind:'timeline',
+    classId:ammCid(), dir, natW:project.w, natH:project.h, src:'' };
+  project.animMap.sources.push(s);
+  ammInvalidate(); markDirty();
+  return s;
+}
+function ammDeleteSource(id){
+  const s = ammSource(id);
+  if(!s) return;
+  if(!confirm(`ลบแหล่ง Sprite "${s.name}" ?\nการกำหนด Animation ที่ใช้แหล่งนี้จะกลายเป็น "ยังไม่ได้กำหนด" ทุกอาชีพ`)) return;
+  project.animMap.sources = project.animMap.sources.filter(x => x.id !== id);
+  for(const cid of Object.keys(project.animMap.classes)){
+    const m = project.animMap.classes[cid];
+    for(const t of AMM_TYPES)
+      if(m[t.id] && m[t.id].sourceId === id) m[t.id] = null;
+  }
+  ammImgs.delete(id);
+  ammInvalidate(); markDirty();
+  ammRenderPanel();
+  toast('ลบแหล่ง Sprite แล้ว — การกำหนดที่ใช้มันถูกยกเลิกทุกอาชีพ');
+}
+/* ---------- ภาพ runtime (โหลดจาก dataURL ครั้งเดียว) ---------- */
+function ammGetImg(s){
+  if(!s || s.kind !== 'sheet' || !s.src) return null;
+  let e = ammImgs.get(s.id);
+  if(e) return e.ok ? e.img : null;
+  e = { img:new Image(), ok:false };
+  e.img.onload = () => { e.ok = true; ammInvalidate(); };
+  e.img.onerror = () => { e.ok = false; };
+  e.img.src = s.src;
+  ammImgs.set(s.id, e);
+  return null;
+}
+/* ---------- เฟรม → canvas (Nearest Neighbor · ปิด smoothing · คง Alpha) ---------- */
+function ammFrameRect(a, i){
+  const fr = a.frames[clamp(i, 0, a.frames.length - 1)];
+  const s = ammSource(a.sourceId);
+  if(!s || !fr) return null;
+  if(s.kind === 'timeline') return { x:0, y:0, w:project.w, h:project.h, fi:fr.fi, kind:'timeline' };
+  return { x:fr.x, y:fr.y, w:fr.w, h:fr.h, kind:'sheet' };
+}
+function ammFrameCanvas(a, i){
+  const s = ammSource(a.sourceId);
+  const fr = ammFrameRect(a, i);
+  if(!s || !fr) return null;
+  if(s.kind === 'timeline') return gtFrameCanvas(s.dir, fr.fi);
+  const img = ammGetImg(s);
+  if(!img) return null;
+  const key = s.id + '|' + fr.x + ',' + fr.y + ',' + fr.w + ',' + fr.h + '|' + ammRev;
+  let cv = ammFrameCache.get(key);
+  if(cv) return cv;
+  cv = document.createElement('canvas');
+  cv.width = fr.w; cv.height = fr.h;
+  const g = cv.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  g.drawImage(img, fr.x, fr.y, fr.w, fr.h, 0, 0, fr.w, fr.h);
+  if(ammFrameCache.size > 240) ammFrameCache.clear();
+  ammFrameCache.set(key, cv);
+  return cv;
+}
+function ammFramesOf(a){
+  return a && Array.isArray(a.frames) ? a.frames : [];
+}
+/* ---------- Assignment (หนึ่งท่า = 1 แหล่ง + ลำดับเฟรม + FPS + Loop) ---------- */
+function ammAssign(type, assignment){
+  const m = ammClassMap();
+  m[type] = assignment;
+  ammInvalidate(); markDirty();
+  if(typeof ammRenderPanel === 'function') ammRenderPanel();
+}
+function ammClear(type){
+  const m = ammClassMap();
+  m[type] = null;
+  ammInvalidate(); markDirty();
+  if(typeof ammRenderPanel === 'function') ammRenderPanel();
+}
+function ammMissingList(cid){
+  const m = ammClassMap(cid);
+  return AMM_TYPES.filter(t => !ammGet(t.id, cid)).map(t => t.id);
+}
+/* ---------- Serialize (เข้ากันกับ pacc-v1 — ไฟล์เก่าไม่มี animMap ก็ใช้ได้) ---------- */
+function ammSerialize(){
+  ammEnsure();
+  return {
+    sources: project.animMap.sources.map(s => ({ id:s.id, name:s.name, kind:s.kind,
+      classId:s.classId || '', natW:s.natW | 0, natH:s.natH | 0, src:s.src || '', dir:s.dir || '' })),
+    classes: JSON.parse(JSON.stringify(project.animMap.classes)),
+  };
+}
+function ammDeserialize(o){
+  const base = ammDefault();
+  if(!o || typeof o !== 'object') return base;
+  const out = base;
+  out.sources = (Array.isArray(o.sources) ? o.sources : []).filter(s => s && s.id).map(s => ({
+    id:String(s.id), name:String(s.name || 'sprite'),
+    kind:(s.kind === 'timeline') ? 'timeline' : 'sheet',
+    classId:String(s.classId || ''), natW:Math.max(1, s.natW | 0), natH:Math.max(1, s.natH | 0),
+    src:String(s.src || ''), dir:DIRS.includes(s.dir) ? s.dir : '',
+  })).filter(s => s.kind === 'timeline' ? !!s.dir : !!s.src);
+  if(o.classes && typeof o.classes === 'object'){
+    for(const cid of Object.keys(o.classes)){
+      const m = o.classes[cid];
+      if(!m || typeof m !== 'object') continue;
+      const cm = {};
+      for(const t of AMM_TYPES){
+        const a = m[t.id];
+        if(a && typeof a === 'object' && a.sourceId && Array.isArray(a.frames)){
+          cm[t.id] = { sourceId:String(a.sourceId), fps:clamp((a.fps | 0) || 8, 1, 60),
+            loop:a.loop !== false,
+            frames:a.frames.filter(fr => fr && Number.isFinite(+fr.x) && Number.isFinite(+fr.w) && +fr.w > 0 && +fr.h > 0)
+              .map(fr => ({ x:Math.max(0, fr.x | 0), y:Math.max(0, fr.y | 0),
+                w:Math.max(1, fr.w | 0), h:Math.max(1, fr.h | 0), fi:Math.max(0, (fr.fi | 0)) })) };
+          if(!cm[t.id].frames.length) delete cm[t.id];
+        }
+      }
+      out.classes[cid] = cm;
+    }
+  }
+  return out;
+}
+function ammOnClassChange(){
+  ammLastPanelClass = null;
+  ammRenderPanel();
+  if(typeof gtRefreshMap === 'function' && gt.open) gtRefreshMap();
+}
+
+
+/* ---------- แผง Animation Mapping ใน Editor ---------- */
+function ammClassLabel(){
+  return project.classId ? project.classId : 'ไม่ระบุ / Custom';
+}
+function ammRenderPanel(){
+  if(!project || !$('#ammSources')) return;
+  ammEnsure();
+  const cid = ammCid();
+  $('#ammClassLbl').textContent = 'อาชีพ: ' + ammClassLabel();
+  const srcs = ammSourcesOf(cid);
+  const otherCount = project.animMap.sources.length - srcs.length;
+  const wrap = $('#ammSources');
+  wrap.innerHTML = '';
+  if(!srcs.length){
+    wrap.innerHTML = '<div class="small">ยังไม่มี Sprite ของอาชีพนี้ — กด "＋ นำเข้า Sprite Sheet" (ภาพที่รวมหลายท่าในไฟล์เดียวก็ได้) หรือเพิ่มจาก Timeline ที่วาดในโปรเจกต์</div>';
+  }
+  for(const s of srcs){
+    const div = document.createElement('div');
+    div.className = 'ammsrc';
+    const th = document.createElement('canvas');
+    th.className = 'ammsrc-th';
+    th.width = 52; th.height = 52;
+    const g = th.getContext('2d');
+    g.imageSmoothingEnabled = false;
+    if(s.kind === 'sheet'){
+      const img = ammGetImg(s);
+      if(img){
+        const sc = Math.min(52 / s.natW, 52 / s.natH, 4);
+        g.drawImage(img, Math.floor((52 - s.natW * sc) / 2), Math.floor((52 - s.natH * sc) / 2), Math.floor(s.natW * sc), Math.floor(s.natH * sc));
+      } else g.fillStyle = '#9aa1ad', g.fillRect(0, 0, 52, 52);
+    } else {
+      const fc = gtFrameCanvas(s.dir, project.dirs[s.dir]._ci);
+      if(fc){
+        const sc = Math.min(52 / project.w, 52 / project.h, 4);
+        g.drawImage(fc, Math.floor((52 - project.w * sc) / 2), Math.floor((52 - project.h * sc) / 2), Math.floor(project.w * sc), Math.floor(project.h * sc));
+      }
+    }
+    const info = document.createElement('div');
+    info.className = 'ammsrc-info';
+    const used = AMM_TYPES.filter(t => { const a = ammGet(t.id); return a && a.sourceId === s.id; }).length;
+    info.innerHTML = '<b>' + escapeHtml(s.name) + '</b><span class="small">' +
+      (s.kind === 'sheet' ? s.natW + '×' + s.natH + ' px · Sprite Sheet' : 'Timeline ทิศ ' + s.dir.toUpperCase() + ' · ' + project.dirs[s.dir].frames.length + ' เฟรม') +
+      '<br>ใช้อยู่ใน ' + used + ' ท่า</span>';
+    const del = document.createElement('button');
+    del.className = 'icon'; del.textContent = '🗑';
+    del.title = 'ลบแหล่ง Sprite นี้ (การกำหนดที่ใช้จะกลายเป็น Not Assigned)';
+    del.addEventListener('click', () => ammDeleteSource(s.id));
+    info.appendChild(del);
+    div.append(th, info);
+    wrap.appendChild(div);
+  }
+  $('#ammOtherCount').textContent = otherCount ? ('อาชีพอื่นมีแหล่ง Sprite อีก ' + otherCount + ' รายการ (สลับอาชีพเพื่อดู)') : '';
+  /* รายการกำหนด 5 ท่า แบ่ง 3 กลุ่ม */
+  const list = $('#ammAssignList');
+  list.innerHTML = '';
+  for(const grp of AMM_GROUPS){
+    const gh = document.createElement('div');
+    gh.className = 'amm-group';
+    gh.textContent = grp.th;
+    list.appendChild(gh);
+    for(const t of AMM_TYPES.filter(x => x.group === grp.id)){
+      const a = ammGet(t.id);
+      const row = document.createElement('div');
+      row.className = 'amm-row' + (a ? ' ok' : '');
+      const head = document.createElement('div');
+      head.className = 'amm-head';
+      const s = a ? ammSource(a.sourceId) : null;
+      head.innerHTML = '<b>' + t.label + '</b> <span class="small">(' + t.th + ')</span>' +
+        (a ? '<span class="amm-st ok">✓ กำหนดแล้ว · ' + a.frames.length + ' เฟรม · ' + a.fps + ' FPS · ' + (a.loop ? 'Loop' : 'เล่นครั้งเดียว') + ' · ' + escapeHtml(s ? s.name : '') + '</span>'
+           : '<span class="amm-st none">⛔ Not Assigned · ยังไม่ได้กำหนด</span>');
+      const mid = document.createElement('div');
+      mid.className = 'amm-mid';
+      const prev = document.createElement('canvas');
+      prev.className = 'amm-prev'; prev.width = 60; prev.height = 60;
+      prev.dataset.ammprev = t.id;
+      mid.appendChild(prev);
+      const btns = document.createElement('div');
+      btns.className = 'amm-btns';
+      const mk = (label, fn, cls, title) => {
+        const b = document.createElement('button');
+        b.textContent = label; if(cls) b.className = cls; if(title) b.title = title;
+        b.addEventListener('click', fn);
+        return b;
+      };
+      btns.append(
+        mk('เลือกเฟรม', () => ammOpenEditor(t.id), 'primary', 'เปิดหน้าต่างเลือกเฟรมจาก Sprite Sheet — กำหนดจำนวน/ขนาด/ตำแหน่งเฟรม เรียงลำดับ FPS และ Loop ได้เอง'),
+        mk(ammPlay[t.id] ? '⏸' : '▶', () => {
+          if(!ammGet(t.id)){ toast('ยังไม่ได้กำหนด ' + t.label + ' — กด "เลือกเฟรม" เพื่อกำหนดก่อน', 'err'); return; }
+          ammPlay[t.id] = !ammPlay[t.id];
+          ammRenderPanel(); ammEnsureTick();
+        }, '', 'พรีวิว Animation จากเฟรมที่เลือก (real-time)'),
+        mk('ล้าง', () => {
+          if(!ammGet(t.id)) return;
+          if(confirm('ยกเลิกการกำหนด ' + t.label + ' ของอาชีพ ' + ammClassLabel() + ' ?')){
+            ammClear(t.id); ammPlay[t.id] = false;
+            ammRenderPanel();
+            if(gt.open) gtRefreshMap();
+            toast('ยกเลิกการกำหนด ' + t.label + ' แล้ว — สถานะเป็น Not Assigned');
+          }
+        }, 'danger', 'ยกเลิกการกำหนดท่านี้ (เปลี่ยนใหม่ได้ทุกเมื่อ)'),
+      );
+      mid.appendChild(btns);
+      row.append(head, mid);
+      list.appendChild(row);
+    }
+  }
+  const miss = ammMissingList();
+  $('#ammMissSummary').innerHTML = miss.length
+    ? '<span class="amm-warnline">⚠ ยังไม่ได้กำหนด ' + miss.length + ' ท่า: ' + miss.map(t => AMM_TYPE_TH(t)).join(', ') + ' — Game Test จะไม่เล่นท่าเหล่านี้และจะแจ้งเตือนแทนการเดาเอง</span>'
+    : '<span class="amm-okline">✓ กำหนดครบทั้ง ' + AMM_TYPES.length + ' ท่าแล้ว — Game Test จะเล่นตาม Mapping นี้ทันที (เดิน 8 ทิศ · Idle ตามทิศล่าสุด · Attack Front/Back)</span>';
+  ammLastPanelClass = cid;
+  ammEnsureTick();
+}
+$('#ammImportBtn').addEventListener('click', () => $('#ammFile').click());
+$('#ammFile').addEventListener('change', e => {
+  if(e.target.files && e.target.files[0]) ammLoadSheetFile(e.target.files[0]);
+  e.target.value = '';
+});
+$$('.ammAddTl').forEach(b => b.addEventListener('click', () => {
+  const s = ammAddTimelineSource(b.dataset.dir);
+  if(!s){ toast('เพิ่มแหล่งไม่สำเร็จ', 'err'); return; }
+  ammRenderPanel();
+  toast('เพิ่ม "' + s.name + '" เป็นแหล่ง Animation แล้ว — เฟรมจะตาม Timeline จริงของโปรเจกต์ (แก้ภาพแล้วอัปเดตสด)', 'ok');
+}));
+$('#ammOpenGameTest').addEventListener('click', () => {
+  const miss = ammMissingList();
+  if(miss.length && !confirm('ยังไม่ได้กำหนด ' + miss.length + ' ท่า (' + miss.map(t => AMM_TYPE_TH(t)).join(', ') + ')\nGame Test จะไม่เล่นท่าเหล่านั้นและจะแจ้งเตือน — จะเปิด Game Test Mode เลยหรือไม่?')) return;
+  if(gt.open){ gtResume(); return; }
+  gtOpenWin();
+});
+$('#ammHelpToggle').addEventListener('click', () => $('#ammHelpText').classList.toggle('hide'));
+
+/* ---------- หน้าต่างกำหนดเฟรม (Frame Assignment Editor) ---------- */
+function ammOpenEditor(type){
+  ammEnsure();
+  const t = AMM_TYPES.find(x => x.id === type);
+  const cur = ammGet(type);
+  const srcs = ammSourcesOf(ammCid());
+  const srcId = cur ? cur.sourceId : (srcs.length ? srcs[0].id : null);
+  const s = srcId ? ammSource(srcId) : null;
+  ammEd = { type, sourceId:srcId,
+    gx:0, gy:0, gw:32, gh:32,
+    sel:[], fps: cur ? cur.fps : 8, loop: cur ? cur.loop : (type === 'attackFront' || type === 'attackBack' ? false : true),
+    playing:true, pos:0, acc:0, zoom:2, hover:null, lastT:0 };
+  if(cur){
+    ammEd.sel = cur.frames.map(fr => s && s.kind === 'timeline' ? { fi:fr.fi } : { x:fr.x, y:fr.y, w:fr.w, h:fr.h });
+    if(s && s.kind === 'sheet' && cur.frames.length){ ammEd.gx = cur.frames[0].x; ammEd.gy = cur.frames[0].y; ammEd.gw = cur.frames[0].w; ammEd.gh = cur.frames[0].h; }
+  }
+  $('#amTitle').textContent = 'กำหนดเฟรม Animation — ' + t.label + ' (' + t.th + ') · อาชีพ ' + ammClassLabel();
+  $('#amFps').value = ammEd.fps;
+  $('#amLoop').checked = ammEd.loop;
+  $('#amZoom').value = ammEd.zoom;
+  ammEdRenderAll();
+  $('#dlgAnimMap').showModal();
+}
+function ammEdSource(){ return ammEd.sourceId ? ammSource(ammEd.sourceId) : null; }
+function ammEdRenderAll(){
+  const s = ammEdSource();
+  /* เติมรายการแหล่ง Sprite */
+  const sel = $('#amSrc');
+  const srcs = ammSourcesOf(ammCid());
+  sel.innerHTML = srcs.length ? srcs.map(x =>
+    '<option value="' + x.id + '">' + escapeHtml(x.name) + (x.kind === 'sheet' ? ' (' + x.natW + '×' + x.natH + ')' : ' (Timeline ' + x.dir.toUpperCase() + ')') + '</option>').join('')
+    : '<option value="">— ยังไม่มี Sprite ของอาชีพนี้ —</option>';
+  if(ammEd.sourceId && srcs.some(x => x.id === ammEd.sourceId)) sel.value = ammEd.sourceId;
+  else { ammEd.sourceId = srcs.length ? srcs[0].id : null; if(srcs.length) sel.value = ammEd.sourceId; }
+  const isTl = s && s.kind === 'timeline';
+  $('#amGridRow').style.display = (s && s.kind === 'sheet') ? '' : 'none';
+  $('#amSheetEmpty').style.display = s ? 'none' : 'flex';
+  $('#amSheetWrap').style.display = s ? 'block' : 'none';
+  $('#amFramesWrap').style.display = s ? '' : 'none';
+  $('#amPlayBtn').style.display = s ? '' : 'none';
+  if(s && s.kind === 'sheet'){
+    $('#amGX').value = ammEd.gx; $('#amGY').value = ammEd.gy;
+    $('#amGW').value = ammEd.gw; $('#amGH').value = ammEd.gh;
+  }
+  ammEdDrawSheet();
+  ammEdRenderFrames();
+  ammEdUpdateInfo();
+  ammEnsureTick();
+}
+function ammEdCells(){
+  const s = ammEdSource();
+  if(!s) return [];
+  if(s.kind === 'timeline'){
+    return project.dirs[s.dir].frames.map((F, i) => ({ x:i * project.w, y:0, w:project.w, h:project.h, fi:i,
+      label:'เฟรม ' + (i + 1) + (F.hidden ? ' (ซ่อนใน Timeline)' : '') }));
+  }
+  const cols = Math.max(0, Math.floor((s.natW - ammEd.gx) / ammEd.gw));
+  const rows = Math.max(0, Math.floor((s.natH - ammEd.gy) / ammEd.gh));
+  const cells = [];
+  for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++)
+    cells.push({ x:ammEd.gx + c * ammEd.gw, y:ammEd.gy + r * ammEd.gh, w:ammEd.gw, h:ammEd.gh });
+  return cells;
+}
+function ammEdDrawSheet(){
+  const s = ammEdSource();
+  const cv = $('#amSheetCv');
+  if(!s){ cv.width = 10; cv.height = 10; return; }
+  const natW = s.kind === 'timeline' ? project.w * project.dirs[s.dir].frames.length : s.natW;
+  const natH = s.kind === 'timeline' ? project.h : s.natH;
+  const z = ammEd.zoom;
+  cv.width = natW * z; cv.height = natH * z;
+  const g = cv.getContext('2d');
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.clearRect(0, 0, cv.width, cv.height);
+  g.imageSmoothingEnabled = false;
+  /* พื้นหลังลายตารางโปร่งใส ให้เห็น Alpha จริงของ Sprite */
+  for(let y = 0; y < cv.height; y += 8) for(let x = 0; x < cv.width; x += 8){
+    g.fillStyle = ((x / 8 + y / 8) % 2) ? '#d3d6db' : '#eceeF1';
+    g.fillRect(x, y, Math.min(8, cv.width - x), Math.min(8, cv.height - y));
+  }
+  if(s.kind === 'timeline'){
+    project.dirs[s.dir].frames.forEach((F, i) => {
+      const fc = gtFrameCanvas(s.dir, i);
+      if(fc) g.drawImage(fc, i * project.w * z, 0, project.w * z, project.h * z);
+      g.strokeStyle = '#9aa1ad'; g.lineWidth = 1;
+      g.strokeRect(i * project.w * z + .5, .5, project.w * z, project.h * z);
+    });
+  } else {
+    const img = ammGetImg(s);
+    if(img) g.drawImage(img, 0, 0, natW * z, natH * z);
+    else { g.fillStyle = '#9aa1ad'; g.fillRect(0, 0, cv.width, cv.height); g.fillStyle = '#fff'; g.fillText('กำลังโหลดภาพ...', 8, 16); }
+    /* เส้นแบ่งเฟรม / Grid ตามที่ผู้ใช้กำหนด */
+    g.strokeStyle = 'rgba(62,99,221,.55)'; g.lineWidth = 1;
+    for(let x = ammEd.gx; x <= natW + .001; x += ammEd.gw){
+      g.beginPath(); g.moveTo(Math.round(x * z) + .5, 0); g.lineTo(Math.round(x * z) + .5, cv.height); g.stroke();
+      if(x + ammEd.gw > natW) break;
+    }
+    for(let y = ammEd.gy; y <= natH + .001; y += ammEd.gh){
+      g.beginPath(); g.moveTo(0, Math.round(y * z) + .5); g.lineTo(cv.width, Math.round(y * z) + .5); g.stroke();
+      if(y + ammEd.gh > natH) break;
+    }
+  }
+  /* เฟรมที่เลือก: ทับสี + เลขลำดับ */
+  ammEd.sel.forEach((c, i) => {
+    const r = s.kind === 'timeline'
+      ? { x:c.fi * project.w, y:0, w:project.w, h:project.h } : c;
+    g.fillStyle = 'rgba(46,158,91,.30)';
+    g.fillRect(r.x * z, r.y * z, r.w * z, r.h * z);
+    g.strokeStyle = '#2e9e5b'; g.lineWidth = 2;
+    g.strokeRect(r.x * z + 1, r.y * z + 1, r.w * z - 2, r.h * z - 2);
+    g.fillStyle = '#2e9e5b';
+    g.font = 'bold ' + Math.max(11, 5 * z) + 'px sans-serif';
+    g.fillText('#' + (i + 1), r.x * z + 3, r.y * z + Math.max(12, 6 * z));
+  });
+  /* ช่องที่ชี้เมาส์ */
+  if(ammEd.hover){
+    const h = ammEd.hover;
+    g.strokeStyle = '#ff9d2e'; g.lineWidth = 2;
+    g.strokeRect(h.x * z + 1, h.y * z + 1, h.w * z - 2, h.h * z - 2);
+  }
+}
+function ammEdRenderFrames(){
+  const s = ammEdSource();
+  const box = $('#amFrames');
+  box.innerHTML = '';
+  $('#amFramesWrap').style.display = s ? '' : 'none';
+  if(!ammEd.sel.length){
+    box.innerHTML = '<div class="small">ยังไม่ได้เลือกเฟรม — คลิกบนภาพเพื่อเลือกเฟรม (คลิกหลายช่อง = เลือกหลายเฟรมเป็น Animation เดียวกัน · ลำดับ = ลำดับที่คลิก แล้วจัดใหม่ได้ด้านล่าง)</div>';
+    return;
+  }
+  ammEd.sel.forEach((c, i) => {
+    const row = document.createElement('div');
+    row.className = 'amframe';
+    const th = document.createElement('canvas');
+    th.width = 44; th.height = 44;
+    const g = th.getContext('2d');
+    g.imageSmoothingEnabled = false;
+    const fakeA = { sourceId:ammEd.sourceId, frames:s && s.kind === 'timeline' ? [{ fi:c.fi }] : [{ x:c.x, y:c.y, w:c.w, h:c.h }] };
+    const fc = ammFrameCanvas(fakeA, 0);
+    if(fc){
+      const sc = Math.max(1, Math.min(Math.floor(44 / fc.width), Math.floor(44 / fc.height)));
+      g.drawImage(fc, Math.floor((44 - fc.width * sc) / 2), Math.floor((44 - fc.height * sc) / 2), fc.width * sc, fc.height * sc);
+    }
+    const lbl = document.createElement('div');
+    lbl.className = 'amframe-lbl';
+    lbl.innerHTML = '<b>#' + (i + 1) + '</b> ' + (s && s.kind === 'timeline'
+      ? 'Timeline เฟรม ' + (c.fi + 1) + (project.dirs[s.dir].frames[c.fi].hidden ? ' (ซ่อน)' : '')
+      : c.x + ',' + c.y + ' · ' + c.w + '×' + c.h);
+    const btns = document.createElement('div');
+    btns.className = 'row';
+    const mk = (label, fn, title) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.title = title || '';
+      b.addEventListener('click', fn);
+      return b;
+    };
+    btns.append(
+      mk('▲', () => { if(i > 0){ [ammEd.sel[i - 1], ammEd.sel[i]] = [ammEd.sel[i], ammEd.sel[i - 1]]; ammEdRenderFrames(); ammEdDrawSheet(); ammEdUpdateInfo(); } }, 'ย้ายขึ้น (เรียงลำดับเฟรม)'),
+      mk('▼', () => { if(i < ammEd.sel.length - 1){ [ammEd.sel[i + 1], ammEd.sel[i]] = [ammEd.sel[i], ammEd.sel[i + 1]]; ammEdRenderFrames(); ammEdDrawSheet(); ammEdUpdateInfo(); } }, 'ย้ายลง'),
+      mk('✕', () => { ammEd.sel.splice(i, 1); ammEdRenderFrames(); ammEdDrawSheet(); ammEdUpdateInfo(); }, 'เอาเฟรมนี้ออกจาก Animation'),
+    );
+    row.append(th, lbl, btns);
+    box.appendChild(row);
+  });
+}
+function ammEdUpdateInfo(){
+  const s = ammEdSource();
+  $('#amCount').textContent = ammEd.sel.length;
+  if(!s){ $('#amRangeInfo').textContent = ''; return; }
+  if(s.kind === 'timeline'){
+    $('#amRangeInfo').textContent = ammEd.sel.length
+      ? 'เฟรมเริ่มต้น: Timeline เฟรม #' + (ammEd.sel[0].fi + 1) + ' · เฟรมสุดท้าย: #' + (ammEd.sel[ammEd.sel.length - 1].fi + 1) + ' · ขนาดเฟรม = ขนาด Canvas โปรเจกต์ ' + project.w + '×' + project.h
+      : 'Timeline นี้มี ' + project.dirs[s.dir].frames.length + ' เฟรม (รวมเฟรมที่ซ่อน) — เลือกได้ทุกเฟรมและเรียงลำดับใหม่ได้';
+  } else {
+    const cols = Math.max(0, Math.floor((s.natW - ammEd.gx) / ammEd.gw));
+    const rows = Math.max(0, Math.floor((s.natH - ammEd.gy) / ammEd.gh));
+    $('#amRangeInfo').textContent = ammEd.sel.length
+      ? 'เฟรมเริ่มต้น: #' + 1 + ' (' + ammEd.sel[0].x + ',' + ammEd.sel[0].y + ') · เฟรมสุดท้าย: #' + ammEd.sel.length + ' (' + ammEd.sel[ammEd.sel.length - 1].x + ',' + ammEd.sel[ammEd.sel.length - 1].y + ') · ภาพ ' + s.natW + '×' + s.natH + ' แบ่งได้ ' + cols + '×' + rows + ' ช่องตาม Grid นี้'
+      : 'ภาพ ' + s.natW + '×' + s.natH + ' px · แบ่งได้ ' + cols + '×' + rows + ' ช่อง (ขนาดเฟรม ' + ammEd.gw + '×' + ammEd.gh + ' เริ่มที่ ' + ammEd.gx + ',' + ammEd.gy + ') — ตัวเลขเหล่านี้คำนวณจากขนาดจริงของภาพ ไม่สมมติว่าทุกไฟล์เท่ากัน';
+  }
+}
+/* คลิกบนภาพ = เลือก/เอาเฟรมออก · ชี้เมาส์ = ไฮไลต์ช่อง */
+function ammEdCellFromEvent(e, forHover){
+  const s = ammEdSource();
+  if(!s) return null;
+  const cv = $('#amSheetCv');
+  const r = cv.getBoundingClientRect();
+  const px = (e.clientX - r.left) / r.width * cv.width / ammEd.zoom;
+  const py = (e.clientY - r.top) / r.height * cv.height / ammEd.zoom;
+  if(s.kind === 'timeline'){
+    const n = project.dirs[s.dir].frames.length;
+    const i = clamp(Math.floor(px / project.w), 0, n - 1);
+    if(py < 0 || py > project.h) return null;
+    return { x:i * project.w, y:0, w:project.w, h:project.h, fi:i };
+  }
+  if(px < ammEd.gx || py < ammEd.gy) return null;
+  const c = Math.floor((px - ammEd.gx) / ammEd.gw);
+  const rr = Math.floor((py - ammEd.gy) / ammEd.gh);
+  const cols = Math.max(0, Math.floor((s.natW - ammEd.gx) / ammEd.gw));
+  const rows = Math.max(0, Math.floor((s.natH - ammEd.gy) / ammEd.gh));
+  if(c >= cols || rr >= rows) return null;
+  return { x:ammEd.gx + c * ammEd.gw, y:ammEd.gy + rr * ammEd.gh, w:ammEd.gw, h:ammEd.gh };
+}
+$('#amSheetCv').addEventListener('mousemove', e => {
+  const c = ammEdCellFromEvent(e, true);
+  ammEd.hover = c;
+  const s = ammEdSource();
+  $('#amHover').textContent = c ? ('ช่อง (' + (s.kind === 'timeline' ? 'Timeline เฟรม ' + (c.fi + 1) : c.x + ',' + c.y + ' · ' + c.w + '×' + c.h) + ') — คลิกเพื่อเลือก/เอาออก') : '';
+  ammEdDrawSheet();
+});
+$('#amSheetCv').addEventListener('mouseleave', () => { ammEd.hover = null; ammEdDrawSheet(); });
+$('#amSheetCv').addEventListener('click', e => {
+  const s = ammEdSource();
+  const c = ammEdCellFromEvent(e);
+  if(!c) return;
+  const keyOf = x => s.kind === 'timeline' ? 'fi' + x.fi : x.x + ',' + x.y;
+  const idx = ammEd.sel.findIndex(x => keyOf(x) === keyOf(c));
+  if(idx >= 0) ammEd.sel.splice(idx, 1);
+  else ammEd.sel.push(s.kind === 'timeline' ? { fi:c.fi } : { x:c.x, y:c.y, w:c.w, h:c.h });
+  ammEdDrawSheet(); ammEdRenderFrames(); ammEdUpdateInfo();
+});
+$('#amSrc').addEventListener('change', e => {
+  ammEd.sourceId = e.target.value || null;
+  ammEd.sel = []; ammEd.hover = null;
+  const s = ammEdSource();
+  if(s && s.kind === 'sheet'){ ammEd.gx = 0; ammEd.gy = 0; ammEd.gw = Math.min(64, s.natW); ammEd.gh = Math.min(64, s.natH); }
+  ammEdRenderAll();
+});
+$('#amSrcImport').addEventListener('click', () => $('#amFile2').click());
+$('#amFile2').addEventListener('change', e => {
+  if(e.target.files && e.target.files[0]) ammLoadSheetFile(e.target.files[0]);
+  e.target.value = '';
+});
+['amGX', 'amGY', 'amGW', 'amGH'].forEach(id => $('#' + id).addEventListener('change', () => {
+  ammEd.gx = clamp(parseInt($('#amGX').value, 10) || 0, 0, 4096);
+  ammEd.gy = clamp(parseInt($('#amGY').value, 10) || 0, 0, 4096);
+  ammEd.gw = clamp(parseInt($('#amGW').value, 10) || 32, 1, 4096);
+  ammEd.gh = clamp(parseInt($('#amGH').value, 10) || 32, 1, 4096);
+  ammEdDrawSheet(); ammEdUpdateInfo();
+}));
+$('#amZoom').addEventListener('input', e => {
+  ammEd.zoom = clamp(parseInt(e.target.value, 10) || 2, 1, 8);
+  $('#amZoomLbl').textContent = ammEd.zoom + '×';
+  ammEdDrawSheet();
+});
+$('#amClearSel').addEventListener('click', () => { ammEd.sel = []; ammEdDrawSheet(); ammEdRenderFrames(); ammEdUpdateInfo(); });
+$('#amFps').addEventListener('change', e => { ammEd.fps = clamp(parseInt(e.target.value, 10) || 8, 1, 60); e.target.value = ammEd.fps; });
+$('#amLoop').addEventListener('change', e => { ammEd.loop = e.target.checked; });
+$('#amPlayBtn').addEventListener('click', () => {
+  ammEd.playing = !ammEd.playing;
+  $('#amPlayBtn').textContent = ammEd.playing ? '⏸ พัก' : '▶ เล่น';
+  ammEnsureTick();
+});
+$('#amSave').addEventListener('click', () => {
+  const s = ammEdSource();
+  if(!s){ toast('ยังไม่มีแหล่ง Sprite — นำเข้าภาพหรือเพิ่มจาก Timeline ก่อน', 'err'); return; }
+  if(!ammEd.sel.length){ toast('เลือกเฟรมอย่างน้อย 1 เฟรมก่อน (คลิกบนภาพเพื่อเลือก)', 'err'); return; }
+  const frames = s.kind === 'timeline'
+    ? ammEd.sel.map(c => ({ x:0, y:0, w:project.w, h:project.h, fi:c.fi }))
+    : ammEd.sel.map(c => ({ x:c.x, y:c.y, w:c.w, h:c.h, fi:0 }));
+  ammAssign(ammEd.type, { sourceId:s.id, frames, fps:ammEd.fps, loop:ammEd.loop });
+  ammRenderPanel();
+  if(gt.open) gtRefreshMap();
+  toast('บันทึก ' + AMM_TYPE_TH(ammEd.type) + ' แล้ว — ' + frames.length + ' เฟรม · ' + ammEd.fps + ' FPS · ' + (ammEd.loop ? 'Loop' : 'เล่นครั้งเดียว') + ' (อาชีพ ' + ammClassLabel() + ') ไม่แก้ Sprite ต้นฉบับ', 'ok');
+});
+$('#amUnassign').addEventListener('click', () => {
+  ammClear(ammEd.type); ammPlay[ammEd.type] = false;
+  ammRenderPanel();
+  if(gt.open) gtRefreshMap();
+  toast(AMM_TYPE_TH(ammEd.type) + ' ถูกยกเลิก — สถานะ Not Assigned');
+});
+$('#amCancel').addEventListener('click', () => { $('#dlgAnimMap').close(); ammEd = null; });
+$('#dlgAnimMap').addEventListener('close', () => { ammEd = null; });
+
+/* ---------- พรีวิว real-time (แผง + หน้าต่างกำหนดเฟรม) ---------- */
+let ammPreviewRaf = 0;
+function ammDrawPreview(cnv, a, pos){
+  const g = cnv.getContext('2d');
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.clearRect(0, 0, cnv.width, cnv.height);
+  if(!a || !a.frames.length) return;
+  const fr = ammFrameRect(a, pos);
+  const fc = ammFrameCanvas(a, pos);
+  if(!fr || !fc) return;
+  const sc = Math.max(1, Math.min(Math.floor(cnv.width / fr.w), Math.floor(cnv.height / fr.h)));
+  g.imageSmoothingEnabled = false;
+  g.drawImage(fc, Math.floor((cnv.width - fr.w * sc) / 2), Math.floor((cnv.height - fr.h * sc) / 2), fr.w * sc, fr.h * sc);
+}
+function ammTick(ts){
+  let active = false;
+  if(ammEd){
+    const a = { sourceId:ammEd.sourceId, fps:ammEd.fps, loop:ammEd.loop,
+      frames:ammEd.sel.map(c => ({ x:c.x || 0, y:c.y || 0, w:c.w || project.w, h:c.h || project.h, fi:c.fi || 0 })) };
+    const prev = $('#amPrevCv');
+    if(prev && ammEd.sel.length){
+      if(ammEd.playing){
+        const s = ammEdSource();
+        const dur = s && s.kind === 'timeline' && project.dirs[s.dir].frames[ammEd.sel[ammEd.pos % ammEd.sel.length].fi] && project.dirs[s.dir].frames[ammEd.sel[ammEd.pos % ammEd.sel.length].fi].dur > 0
+          ? project.dirs[s.dir].frames[ammEd.sel[ammEd.pos % ammEd.sel.length].fi].dur : 1000 / ammEd.fps;
+        ammEd.acc += ts - (ammEd.lastT || ts);
+        while(ammEd.acc >= dur){ ammEd.acc -= dur; ammEd.pos = (ammEd.pos + 1) % ammEd.sel.length; if(!ammEd.loop && ammEd.pos === 0){ ammEd.pos = ammEd.sel.length - 1; ammEd.playing = false; $('#amPlayBtn').textContent = '▶ เล่น'; break; } }
+        active = true;
+      }
+      ammDrawPreview(prev, a, ammEd.pos);
+    }
+    ammEd.lastT = ts;
+  }
+  for(const t of AMM_TYPES){
+    if(!ammPlay[t.id]) continue;
+    const a = ammGet(t.id);
+    const cnv = document.querySelector('[data-ammprev="' + t.id + '"]');
+    if(!a || !cnv){ ammPlay[t.id] = false; continue; }
+    const now = performance.now();
+    const st = ammPlayState[t.id] || (ammPlayState[t.id] = { pos:0, acc:0, last:now });
+    st.acc += now - st.last;
+    const dur = 1000 / a.fps;
+    while(st.acc >= dur){ st.acc -= dur; st.pos = (st.pos + 1) % a.frames.length; }
+    st.last = now;
+    ammDrawPreview(cnv, a, st.pos);
+    active = true;
+  }
+  ammPreviewRaf = active || ammEd ? requestAnimationFrame(ammTick) : 0;
+}
+const ammPlayState = {};
+function ammEnsureTick(){ if(!ammPreviewRaf) ammPreviewRaf = requestAnimationFrame(ammTick); }
+
+/* =========================================================
+   Part 7: Game Test Mode v2 (ปรับปรุง — เล่นจาก Animation Mapping เท่านั้น)
+   - ดึง Animation จาก Mapping ที่ผู้ใช้กำหนด (แผง Animation Mapping) เท่านั้น
+   - เดิน 8 ทิศ: Down/DownRight/Right/DownLeft = Walk Front (ซ้าย = Flip)
+                 Up/UpRight/UpLeft = Walk Back (ซ้าย = Flip)
+   - Idle ตามทิศเดินล่าสุด: มีแกนขึ้น = Idle Back · แกนซ้าย = Flip
+   - Attack = Attack Front · Flip เมื่อหันทางซ้าย · ทิศอ้างอิงทิศหันล่าสุด
+   - Click-to-Move: คลิกซ้าย/แตะ = เดินไปเป้าหมาย + Destination Marker
+   - ท่าที่ยังไม่ได้กำหนด = แจ้งเตือนชัดเจนและไม่ทำงาน ห้ามแทนที่ด้วยท่าอื่น
+   - แคช invalidate อัตโนมัติเมื่อแก้ไขใน Editor (hook ที่ markDirty)
+========================================================= */
+let gtRev = 0;
+const _gtMarkDirtyBase = markDirty;
+markDirty = function(){ gtRev++; return _gtMarkDirtyBase(); };
+
+const gtOverlayEl = $('#gtOverlay');
+const gtCv = $('#gtCanvas');
+const gtCtx = gtCv.getContext('2d');
+const gtWrap = $('#gtCanvasWrap');
+const GT_CELL = 16;   // ขนาดช่องสิ่งกีดขวาง (พิกเซลฉาก)
+
+const gt = {
+  open:false, paused:false, pid:null,
+  scene:'grass', sceneW:320, sceneH:240,
+  zoom:3, camX:0, camY:0, showGrid:true, borderWalls:true, tool:'move',
+  obstacles:[],
+  walkSpeed:60, runSpeed:120,
+  colW:32, colH:32, colOX:0, colOY:0,
+  showCol:false, showBounds:false, showPivot:true, showOrigin:false, showCenter:false,
+  showHit:false, showHurt:false, showFlip:true,
+  attackAgain:false,
+  fpsUseProject:true, fpsVal:8,
+  inspect:'',
+  keys:{ up:false, down:false, left:false, right:false, run:false },
+  facing8:'down', lastMove:'down',
+  ctm:{ active:false, tx:0, ty:0, lastDist:0, stuckMs:0 },
+  drag:null, panLast:null, dragCell:null,
+  startX:0, startY:0,
+  noteMsg:'', noteUntil:0,
+  blockedWalk:'',
+};
+const gtAct = { state:'idle', facing:'down' };
+/* ทิศ (8 ทิศ) → Animation ที่ต้องใช้ตอนเดิน + Flip — ตามสเปกการเดิน 8 ทิศทาง */
+const GT_DIRANIM = {
+  down:      { walk:'walkFront', flip:false },
+  downRight: { walk:'walkFront', flip:false },
+  downLeft:  { walk:'walkFront', flip:true  },
+  right:     { walk:'walkFront', flip:false },
+  left:      { walk:'walkFront', flip:true  },
+  up:        { walk:'walkBack',  flip:false },
+  upRight:   { walk:'walkBack',  flip:false },
+  upLeft:    { walk:'walkBack',  flip:true  },
+};
+const GT_LEFT_FACING = ['left', 'downLeft', 'upLeft'];
+const gtAnim = { type:'', frames:[], pos:0, acc:0, playing:true, loop:true, speed:1,
+  finished:false, flip:false, name:'', fps:8, held:false };
+const gtMove = { px:0, py:0 };
+const gtSceneCv = document.createElement('canvas');
+let gtSceneDirty = true;
+let gtRaf = 0, gtLastTs = 0, gtFpsAvg = 0, gtPanelAt = 0;
+
+/* ---------- แคชภาพเฟรม Timeline ของโปรเจกต์ (ใช้โดยแหล่งประเภท Timeline) ---------- */
+function gtFrameCanvas(dir, fi){
+  const D = project.dirs[dir];
+  const F = D.frames[fi];
+  if(!F) return null;
+  const key = project.id + '|' + dir + '|' + fi + '|' + F.id + '|' +
+    F.layers.map(l => l.id + (l.visible ? 'v' : 'h')).join('.') + '|' + gtRev;
+  let e = gtFrameCache.get(key);
+  if(e) return e;
+  const cv = document.createElement('canvas');
+  cv.width = project.w; cv.height = project.h;
+  blitLayers(cv.getContext('2d'), F.layers, project.w, project.h, false);
+  if(gtFrameCache.size > 120) gtFrameCache.clear();
+  gtFrameCache.set(key, cv);
+  return cv;
+}
+const gtFrameCache = new Map();
+function gtVisFrames(dir){
+  const out = [];
+  project.dirs[dir].frames.forEach((f, i) => { if(!f.hidden) out.push(i); });
+  return out;
+}
+function gtEffFps(){
+  return gt.fpsUseProject ? null : clamp(gt.fpsVal | 0 || 8, 1, 60);
+}
+/* ---------- ทิศหัน 8 ทิศจากปุ่มที่กดอยู่ (รวมเดินเฉียง) ---------- */
+function gtFacingFromKeys(){
+  const v = gt.keys.up ? 'up' : (gt.keys.down ? 'down' : '');
+  const h = gt.keys.left ? 'left' : (gt.keys.right ? 'right' : '');
+  if(v && h) return v + h[0].toUpperCase() + h.slice(1);   // upLeft / upRight / downLeft / downRight
+  return v || h || gt.facing8;
+}
+function gtIdleFor(facing){
+  /* หยุดหลังเดินลง/ซ้าย/ขวา/เฉียงลง = Idle Front (ซ้าย = Flip) · หลังเดินขึ้น/เฉียงขึ้น = Idle Back */
+  return {
+    type:(facing === 'up' || facing === 'upLeft' || facing === 'upRight') ? 'idleBack' : 'idleFront',
+    flip:GT_LEFT_FACING.includes(facing),
+  };
+}
+/* โจมตีตามทิศที่หันล่าสุด: มีแกนขึ้น = Attack Back · แกนลง/ข้าง = Attack Front · แกนซ้าย = Flip */
+function gtAttackFor(facing){
+  const back = facing === 'up' || facing === 'upLeft' || facing === 'upRight';
+  return { type: back ? 'attackBack' : 'attackFront', flip: GT_LEFT_FACING.includes(facing) };
+}
+function gtSetAnimV2(type, flip, opts){
+  const o = opts || {};
+  const a = ammGet(type);
+  if(!a){ gtAnim.type = ''; gtAnim.frames = []; return; }
+  const key = type + '|' + (flip ? 'F' : 'N');
+  const frames = ammFramesOf(a);
+  const s = ammSource(a.sourceId);
+  if(gtAnim.key === key && gtAnim.srcId === a.sourceId && gtAnim.n === frames.length) return;
+  gtAnim.key = key; gtAnim.srcId = a.sourceId; gtAnim.n = frames.length;
+  gtAnim.type = type;
+  gtAnim.frames = frames;
+  gtAnim.pos = 0; gtAnim.acc = 0;
+  gtAnim.playing = o.playing !== undefined ? o.playing : true;
+  gtAnim.loop = o.loop !== undefined ? o.loop : a.loop;
+  gtAnim.speed = o.speed || 1;
+  gtAnim.finished = false;
+  gtAnim.flip = !!flip;
+  gtAnim.fps = a.fps;
+  gtAnim.held = false;
+  gtAnim.name = AMM_TYPE_TH(type) + ' · ' + (s ? s.name : '');
+}
+/* ---------- แจ้งเตือนท่าที่ยังไม่ได้กำหนด (ห้ามแทนที่ด้วยท่าอื่น) ---------- */
+function gtWarnMissing(type, action){
+  const msg = 'กรุณากำหนด ' + AMM_TYPE_TH(type) + ' ก่อนใช้งาน Game Test Mode' +
+    (action ? ' (' + action + ')' : '') + ' — กำหนดได้ในแผง Animation Mapping';
+  gtNote(msg);
+  toast(msg, 'err');
+}
+function gtRefreshMap(){
+  /* Mapping เปลี่ยน (กำหนด/ล้าง/สลับอาชีพ) → เล่นใหม่จาก Mapping ปัจจุบัน */
+  gtAnim.key = ''; gtAnim.srcId = ''; gtAnim.n = -1;
+  gtAnim.frames = []; gtAnim.pos = 0; gtAnim.acc = 0; gtAnim.finished = false;
+  if(gt.ctm.active) gt.ctm.active = false;
+  gt.blockedWalk = '';
+  ammRenderGTStatus();
+  gtUpdatePanels();
+}
+function gtNote(msg){
+  gt.noteMsg = msg; gt.noteUntil = performance.now() + 3200;
+}
+function gtPressAttack(){
+  if(!gt.open || gt.paused) return;
+  const attacking = gtAct.state === 'attack' && gtAnim.playing && !gtAnim.finished;
+  if(attacking && !gt.attackAgain){
+    gtNote('กดโจมตีซ้อนไม่ได้ขณะ Animation โจมตียังไม่จบ (เปิด "โจมตีซ้ำได้" ในแผง Animation ของ Game Test หากต้องการ)');
+    return;
+  }
+  const atk = gtAttackFor(gt.facing8);
+  if(!ammGet(atk.type)){
+    /* ท่าโจมตีของทิศที่หันยังไม่ได้กำหนด → แจ้งเตือน ไม่โจมตี ไม่เอาท่าอื่นมาแทน */
+    gtWarnMissing(atk.type, 'กด Space เพื่อโจมตีทิศ ' + gt.facing8);
+    return;
+  }
+  gtAct.state = 'attack';
+  /* โจมตี = เล่นครั้งเดียวต่อการกด · ทิศซ้าย = Flip · ทิศอ้างอิงจากทิศที่หันล่าสุด */
+  gtSetAnimV2(atk.type, atk.flip, { loop:false });
+  gtAnim.playing = true;
+}
+
+/* ---------- การเคลื่อนที่ + Collision (แยกจากภาพ Sprite — ไม่แก้พิกเซลภาพ) ---------- */
+function gtBoxAt(px, py){
+  return { x: px + gt.colOX - gt.colW / 2, y: py + gt.colOY - gt.colH / 2, w: gt.colW, h: gt.colH };
+}
+function gtRectsOverlap(a, b){
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+function gtCollides(box){
+  if(gt.borderWalls && (box.x < 0 || box.y < 0 || box.x + box.w > gt.sceneW || box.y + box.h > gt.sceneH)) return true;
+  for(const o of gt.obstacles) if(gtRectsOverlap(box, o)) return true;
+  return false;
+}
+function gtTryMove(dx, dy){
+  const dist = Math.hypot(dx, dy);
+  const steps = Math.max(1, Math.min(64, Math.ceil(dist / 3)));
+  const sx = dx / steps, sy = dy / steps;
+  for(let i = 0; i < steps; i++){
+    const nx = gtMove.px + sx;
+    if(!gtCollides(gtBoxAt(nx, gtMove.py))) gtMove.px = nx;
+    const ny = gtMove.py + sy;
+    if(!gtCollides(gtBoxAt(gtMove.px, ny))) gtMove.py = ny;
+  }
+  gtMove.px = clamp(gtMove.px, 0, gt.sceneW);
+  gtMove.py = clamp(gtMove.py, 0, gt.sceneH);
+}
+function gtClearKeys(){
+  gt.keys.up = gt.keys.down = gt.keys.left = gt.keys.right = gt.keys.run = false;
+}
+function gtWalkRequired(facing){
+  const d = GT_DIRANIM[facing] || GT_DIRANIM.down;
+  return d.walk;
+}
+/* เดินด้วยคีย์บอร์ด — ท่าเดินที่ต้องใช้ยังไม่ได้กำหนด = บล็อกทิศนั้น + แจ้งชัดเจน */
+function gtMoveByKeys(dt){
+  const facing = gt.facing8;
+  const req = gtWalkRequired(facing);
+  if(!ammGet(req)){
+    if(gt.blockedWalk !== req){
+      gt.blockedWalk = req;
+      gtWarnMissing(req, 'เดินทิศ ' + facing);
+    }
+    return;   /* ไม่ขยับ ไม่เล่นท่าอื่นแทน */
+  }
+  gt.blockedWalk = '';
+  let ix = (gt.keys.right ? 1 : 0) - (gt.keys.left ? 1 : 0);
+  let iy = (gt.keys.down ? 1 : 0) - (gt.keys.up ? 1 : 0);
+  if(ix && iy){ ix *= Math.SQRT1_2; iy *= Math.SQRT1_2; }   // เดินเฉียง = ความเร็วเท่าเดิม
+  const spd = gt.keys.run ? gt.runSpeed : gt.walkSpeed;
+  gtTryMove(ix * spd * dt / 1000, iy * spd * dt / 1000);
+  gt.lastMove = facing;
+}
+/* ---------- Click-to-Move ---------- */
+function gtCTMSet(wx, wy){
+  gt.ctm.tx = clamp(wx, 0, gt.sceneW); gt.ctm.ty = clamp(wy, 0, gt.sceneH);
+  gt.ctm.active = true;
+  gt.ctm.lastDist = Math.hypot(gt.ctm.tx - gtMove.px, gt.ctm.ty - gtMove.py);
+  gt.ctm.stuckMs = 0;
+}
+function gtCTMCancel(silent){
+  if(!gt.ctm.active) return;
+  gt.ctm.active = false;
+  if(!silent) gtNote('ยกเลิกเป้าหมาย Click-to-Move แล้ว (สั่งด้วยคีย์บอร์ด)');
+}
+function gtCTMStep(dt){
+  const dx = gt.ctm.tx - gtMove.px, dy = gt.ctm.ty - gtMove.py;
+  const dist = Math.hypot(dx, dy);
+  if(dist < 1.5){
+    gt.ctm.active = false;
+    return;
+  }
+  const vert = dy < 0 ? 'up' : 'down';
+  const horiz = dx < 0 ? 'left' : 'right';
+  let facing;
+  if(Math.abs(dx) > dist * 0.3 && Math.abs(dy) > dist * 0.3)
+    facing = vert + horiz[0].toUpperCase() + horiz.slice(1);   // เฉียง: ทั้งสองแกนมีนัยสำคัญ
+  else if(Math.abs(dx) >= Math.abs(dy)) facing = horiz;
+  else facing = vert;
+  gt.facing8 = facing;
+  const req = gtWalkRequired(facing);
+  if(!ammGet(req)){
+    gt.ctm.active = false;
+    gtWarnMissing(req, 'เดินไปเป้าหมายทิศ ' + facing);
+    return;
+  }
+  const spd = gt.walkSpeed;
+  const before = dist;
+  gtTryMove(dx / dist * spd * dt / 1000, dy / dist * spd * dt / 1000);
+  const after = Math.hypot(gt.ctm.tx - gtMove.px, gt.ctm.ty - gtMove.py);
+  gt.lastMove = facing;
+  if(before - after < 0.4){
+    gt.ctm.stuckMs += dt;
+    if(gt.ctm.stuckMs > 700){
+      gt.ctm.active = false;
+      gtNote('เดินไปเป้าหมายไม่ได้ — เจอกำแพง/สิ่งกีดขวางในเส้นทาง (ลองคลิกจุดใหม่)');
+    }
+  } else gt.ctm.stuckMs = 0;
+  if(after < 1.5) gt.ctm.active = false;
+}
+/* ---------- อัปเดตสถานะเกม (Delta Time — ความเร็วไม่ขึ้นกับ FPS เครื่อง) ---------- */
+function gtUpdate(dt){
+  gt.facing8 = gtFacingFromKeys();
+  gtAct.facing = gt.facing8;
+  const attackActive = gtAct.state === 'attack' && gtAnim.playing && !gtAnim.finished;
+  const dirKey = gt.keys.up || gt.keys.down || gt.keys.left || gt.keys.right;
+  if(!attackActive){
+    if(dirKey) gtAct.state = gt.keys.run ? 'run' : 'walk';
+    else if(gt.ctm.active) gtAct.state = 'walk';   // Click-to-Move = เดิน (เล่น Walk ตาม Mapping)
+    else gtAct.state = 'idle';
+  }
+
+  if(attackActive){ /* ระหว่างโจมตีไม่เดิน */ }
+  else if(dirKey) gtMoveByKeys(dt);
+  else if(gt.ctm.active) gtCTMStep(dt);
+
+  gtAnimResolve(dt);
+
+  if(gtAct.state === 'attack' && gtAnim.finished){
+    gtAct.state = dirKey ? 'walk' : 'idle';
+    gtAnim.finished = false;
+  }
+}
+/* เลือก Animation จาก Mapping เท่านั้น — ท่าที่ยังไม่กำหนด = ค้างเฟรมเดิม + แจ้งเตือน */
+function gtAnimResolve(dt){
+  if(gt.inspect){
+    const a = ammGet(gt.inspect);
+    if(a){
+      gtSetAnimV2(gt.inspect, false, { loop:a.loop, name:'ดู Manual · ' + AMM_TYPE_TH(gt.inspect) + ' (' + a.frames.length + ' เฟรม)' });
+    } else {
+      gtAnim.frames = []; gtAnim.type = '';
+      gtAnim.name = AMM_TYPE_TH(gt.inspect) + ' ยังไม่ได้กำหนด';
+      gtAnim.held = true;
+    }
+  } else if(gtAct.state === 'attack'){
+    /* เล่น Attack อยู่ (เริ่มโดย gtPressAttack) — ปล่อยไว้จนจบ */
+  } else if(gtAct.state === 'walk' || gtAct.state === 'run'){
+    const req = gtWalkRequired(gt.facing8);
+    const flip = (GT_DIRANIM[gt.facing8] || GT_DIRANIM.down).flip;
+    if(ammGet(req)){
+      gt.blockedWalk = '';
+      gtSetAnimV2(req, flip, { loop:true, speed:gtAct.state === 'run' ? 1.6 : 1,
+        name:(gtAct.state === 'run' ? 'Run · ' : '') + AMM_TYPE_TH(req) + (flip ? ' + Flip' : '') +
+          (gtAct.state === 'run' ? ' (×1.6)' : '') });
+    }
+    /* ไม่ได้กำหนด → ค้างเฟรมเดิม (การเคลื่อนที่ถูกบล็อกใน gtMoveByKeys แล้ว) */
+  } else {   /* idle */
+    const id = gtIdleFor(gt.lastMove);
+    if(ammGet(id.type)){
+      gtSetAnimV2(id.type, id.flip, { loop:true, name:AMM_TYPE_TH(id.type) + (id.flip ? ' + Flip' : '') + ' · หลังหัน ' + gt.lastMove });
+    } else if(gtAnim.frames.length){
+      if(!gtAnim.held){
+        gtAnim.held = true;
+        gtNote(AMM_TYPE_TH(id.type) + ' ยังไม่ได้กำหนด — ค้างเฟรมเดินล่าสุด (ไม่เลือก Animation อื่นมาแทน) · กำหนดได้ในแผง Animation Mapping');
+      }
+    } else {
+      gtAnim.type = ''; gtAnim.frames = [];
+      gtAnim.name = AMM_TYPE_TH(id.type) + ' ยังไม่ได้กำหนด — ไม่มีเฟรมให้แสดง';
+    }
+  }
+  gtAnimStep(dt);
+}
+function gtAnimStep(dt){
+  if(!gtAnim.frames.length || !gtAnim.playing) return;
+  const fps = gt.fpsUseProject ? gtAnim.fps : gtEffFps();
+  const s = ammSource(gtAnim.srcId);
+  gtAnim.acc += dt * gtAnim.speed;
+  let guard = 0;
+  while(guard++ < 240){
+    let dur = 1000 / Math.max(1, fps);
+    if(s && s.kind === 'timeline'){
+      const fr = gtAnim.frames[gtAnim.pos];
+      const F = project.dirs[s.dir] && project.dirs[s.dir].frames[fr.fi];
+      if(F && F.dur > 0) dur = F.dur;   /* เฟรม Timeline ที่ตั้งเวลาเองใช้เวลาของเฟรมนั้น */
+    }
+    dur = Math.max(16, dur);
+    if(gtAnim.acc < dur) break;
+    gtAnim.acc -= dur;
+    if(gtAnim.pos + 1 < gtAnim.frames.length) gtAnim.pos++;
+    else if(gtAnim.loop) gtAnim.pos = 0;
+    else { gtAnim.playing = false; gtAnim.finished = true; gtAnim.acc = 0; break; }
+  }
+}
+
+/* ---------- ฉากทดสอบ (สร้างภายในโหมดทดสอบ — ไม่เกี่ยวกับระบบวาดภาพเดิม) ---------- */
+function gtHash(x, y){
+  let h = (x * 374761393 + y * 668265263) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+function gtRebuildScene(){
+  gtSceneCv.width = gt.sceneW; gtSceneCv.height = gt.sceneH;
+  const g = gtSceneCv.getContext('2d');
+  const T = 16;
+  switch(gt.scene){
+    case 'trans': {
+      for(let y = 0; y < gt.sceneH; y += 8) for(let x = 0; x < gt.sceneW; x += 8){
+        g.fillStyle = ((x / 8 + y / 8) % 2) ? '#cfd2d8' : '#ffffff';
+        g.fillRect(x, y, Math.min(8, gt.sceneW - x), Math.min(8, gt.sceneH - y));
+      }
+      break;
+    }
+    case 'grid': {
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, gt.sceneW, gt.sceneH);
+      break;
+    }
+    case 'grass': {
+      for(let ty = 0; ty < gt.sceneH; ty += T) for(let tx = 0; tx < gt.sceneW; tx += T){
+        g.fillStyle = ((tx / T + ty / T) % 2) ? '#3e8a3c' : '#46a047';
+        g.fillRect(tx, ty, T, T);
+      }
+      for(let y = 0; y < gt.sceneH; y += 4) for(let x = 0; x < gt.sceneW; x += 4){
+        const r = gtHash(x, y);
+        if(r < 0.07){ g.fillStyle = '#66c25e'; g.fillRect(x + 2, y + 1, 2, 3); }
+        else if(r > 0.95){ g.fillStyle = '#357a34'; g.fillRect(x, y + 2, 3, 2); }
+      }
+      break;
+    }
+    case 'stone': {
+      for(let ty = 0; ty < gt.sceneH; ty += T) for(let tx = 0; tx < gt.sceneW; tx += T){
+        const r = gtHash(tx, ty);
+        g.fillStyle = r < 0.15 ? '#8a9099' : (r > 0.85 ? '#a2a8b0' : '#969ca4');
+        g.fillRect(tx, ty, T, T);
+        g.fillStyle = '#7d848d';
+        g.fillRect(tx, ty, T, 1); g.fillRect(tx, ty, 1, T);
+      }
+      break;
+    }
+    case 'dungeon': {
+      g.fillStyle = '#23272f'; g.fillRect(0, 0, gt.sceneW, gt.sceneH);
+      const BH = 8, BW = 16;
+      for(let y = 0; y < gt.sceneH; y += BH){
+        const off = ((y / BH) % 2) ? BW / 2 : 0;
+        for(let x = -BW; x < gt.sceneW; x += BW){
+          const bx = Math.round(x + off);
+          const x0 = Math.max(0, bx), x1 = Math.min(gt.sceneW, bx + BW - 1);
+          if(x1 <= x0) continue;
+          const r = gtHash(bx, y);
+          g.fillStyle = r < 0.12 ? '#2b303a' : (r > 0.88 ? '#3a404c' : '#31363f');
+          g.fillRect(x0, y, x1 - x0, BH - 1);
+        }
+      }
+      break;
+    }
+    default: { g.fillStyle = '#f1f2f4'; g.fillRect(0, 0, gt.sceneW, gt.sceneH); }
+  }
+  for(const o of gt.obstacles){
+    g.fillStyle = '#5b6472'; g.fillRect(o.x, o.y, o.w, o.h);
+    g.fillStyle = '#6d7787'; g.fillRect(o.x, o.y, o.w, 2);
+    g.fillStyle = '#454e5a'; g.fillRect(o.x, o.y + o.h - 3, o.w, 3);
+    g.strokeStyle = '#2f3540'; g.lineWidth = 1;
+    g.strokeRect(o.x + .5, o.y + .5, o.w - 1, o.h - 1);
+  }
+  if(gt.borderWalls){
+    g.strokeStyle = 'rgba(214,69,69,.6)'; g.lineWidth = 3;
+    g.strokeRect(1.5, 1.5, gt.sceneW - 3, gt.sceneH - 3);
+  }
+  gtSceneDirty = false;
+}
+
+/* ---------- เรนเดอร์ (Nearest Neighbor / ปิด smoothing / รักษาความโปร่งใส) ---------- */
+function gtCurrentFrame(){
+  if(!gtAnim.frames.length || !gtAnim.type) return null;
+  const a = ammGet(gtAnim.type);
+  if(!a) return null;
+  const fc = ammFrameCanvas(a, gtAnim.pos);
+  const fr = ammFrameRect(a, gtAnim.pos);
+  if(!fc || !fr) return null;
+  return { cv:fc, w:fr.w, h:fr.h, flip:gtAnim.flip };
+}
+function gtRender(){
+  const dpr = window.devicePixelRatio || 1;
+  const cw = gtWrap.clientWidth, ch = gtWrap.clientHeight;
+  if(cw < 10 || ch < 10) return;
+  if(gtCv.width !== Math.round(cw * dpr) || gtCv.height !== Math.round(ch * dpr)){
+    gtCv.width = Math.round(cw * dpr); gtCv.height = Math.round(ch * dpr);
+  }
+  if(gtSceneDirty) gtRebuildScene();
+  const g = gtCtx;
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.imageSmoothingEnabled = false;
+  g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--stage').trim() || '#d9dce1';
+  g.fillRect(0, 0, cw, ch);
+  const z = gt.zoom;
+  const vw = cw / z, vh = ch / z;
+  gt.camX = vw >= gt.sceneW ? (gt.sceneW - vw) / 2 : clamp(gt.camX, 0, gt.sceneW - vw);
+  gt.camY = vh >= gt.sceneH ? (gt.sceneH - vh) / 2 : clamp(gt.camY, 0, gt.sceneH - vh);
+  const sx = Math.max(0, Math.floor(gt.camX)), sy = Math.max(0, Math.floor(gt.camY));
+  const sw = Math.min(gt.sceneW - sx, Math.ceil(vw) + 1), sh = Math.min(gt.sceneH - sy, Math.ceil(vh) + 1);
+  if(sw > 0 && sh > 0){
+    g.drawImage(gtSceneCv, sx, sy, sw, sh,
+      Math.round((sx - gt.camX) * z), Math.round((sy - gt.camY) * z), Math.round(sw * z), Math.round(sh * z));
+  }
+  if(gt.showGrid && z >= 2){
+    g.strokeStyle = GRID_C1; g.lineWidth = 1; g.beginPath();
+    for(let x = Math.floor(gt.camX / GT_CELL) * GT_CELL; x < gt.camX + vw; x += GT_CELL){
+      if(x <= 0 || x >= gt.sceneW) continue;
+      const px = Math.round((x - gt.camX) * z) + .5;
+      g.moveTo(px, 0); g.lineTo(px, ch);
+    }
+    for(let y = Math.floor(gt.camY / GT_CELL) * GT_CELL; y < gt.camY + vh; y += GT_CELL){
+      if(y <= 0 || y >= gt.sceneH) continue;
+      const py = Math.round((y - gt.camY) * z) + .5;
+      g.moveTo(0, py); g.lineTo(cw, py);
+    }
+    g.stroke();
+  }
+  /* Destination Marker (Click-to-Move) — เส้นประจากตัวละคร + วงกลมกระพริบที่เป้าหมาย */
+  if(gt.ctm.active){
+    const tx = Math.round((gt.ctm.tx - gt.camX) * z), ty = Math.round((gt.ctm.ty - gt.camY) * z);
+    const cx = Math.round((gtMove.px - gt.camX) * z), cy = Math.round((gtMove.py - gt.camY) * z);
+    g.strokeStyle = 'rgba(62,99,221,.6)'; g.lineWidth = 1.5;
+    g.setLineDash([5, 4]);
+    g.beginPath(); g.moveTo(cx, cy); g.lineTo(tx, ty); g.stroke();
+    g.setLineDash([]);
+    const pulse = 6 + Math.sin(performance.now() / 160) * 2.5;
+    g.strokeStyle = '#3e63dd'; g.lineWidth = 2.5;
+    g.beginPath(); g.arc(tx, ty, pulse + 4, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = 'rgba(62,99,221,.25)';
+    g.beginPath(); g.arc(tx, ty, pulse + 4, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#3e63dd';
+    g.beginPath(); g.arc(tx, ty, 3, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#3e63dd'; g.lineWidth = 1.5;
+    g.beginPath();
+    g.moveTo(tx - pulse - 8, ty); g.lineTo(tx - pulse - 3, ty);
+    g.moveTo(tx + pulse + 3, ty); g.lineTo(tx + pulse + 8, ty);
+    g.moveTo(tx, ty - pulse - 8); g.lineTo(tx, ty - pulse - 3);
+    g.moveTo(tx, ty + pulse + 3); g.lineTo(tx, ty + pulse + 8);
+    g.stroke();
+  }
+  const F = gtCurrentFrame();
+  if(F){
+    const dw = F.w * z, dh = F.h * z;
+    const dx = Math.round((gtMove.px - F.w / 2 - gt.camX) * z);
+    const dy = Math.round((gtMove.py - F.h / 2 - gt.camY) * z);
+    g.imageSmoothingEnabled = false;
+    if(F.flip){
+      g.save();
+      g.translate(dx + dw, dy);
+      g.scale(-1, 1);          /* Horizontal Flip — กึ่งกลางเดิม ไม่เลื่อนตำแหน่ง */
+      g.drawImage(F.cv, 0, 0, F.w, F.h, 0, 0, dw, dh);
+      g.restore();
+    } else {
+      g.drawImage(F.cv, 0, 0, F.w, F.h, dx, dy, dw, dh);
+    }
+    gtDrawDebug(g, z, dx, dy, dw, dh, F);
+  }
+}
+function gtCross(g, wx, wy, color){
+  const px = Math.round((wx - gt.camX) * gt.zoom), py = Math.round((wy - gt.camY) * gt.zoom);
+  const s = Math.max(4, gt.zoom * 1.5);
+  g.strokeStyle = color; g.lineWidth = 1.5;
+  g.beginPath();
+  g.moveTo(px - s, py); g.lineTo(px + s, py);
+  g.moveTo(px, py - s); g.lineTo(px, py + s);
+  g.stroke();
+}
+function gtDrawDebug(g, z, dx, dy, dw, dh, F){
+  const ox = gtMove.px - F.w / 2, oy = gtMove.py - F.h / 2;   // Origin = มุมซ้ายบน Sprite บนฉาก
+  if(gt.showBounds){
+    g.strokeStyle = '#3e63dd'; g.lineWidth = Math.max(1, z / 2);
+    g.setLineDash([4, 3]);
+    g.strokeRect(dx + .5, dy + .5, dw - 1, dh - 1);
+    g.setLineDash([]);
+  }
+  if(gt.showCol){
+    const b = gtBoxAt(gtMove.px, gtMove.py);
+    g.strokeStyle = '#d64545'; g.lineWidth = Math.max(1, z / 2);
+    g.strokeRect(Math.round((b.x - gt.camX) * z) + .5, Math.round((b.y - gt.camY) * z) + .5,
+      Math.round(b.w * z), Math.round(b.h * z));
+  }
+  if(gt.showOrigin) gtCross(g, ox, oy, '#00b7c3');
+  if(gt.showPivot) gtCross(g, gtMove.px, gtMove.py, '#ff9d2e');
+  if(gt.showCenter){
+    const px = Math.round((ox + F.w / 2 - gt.camX) * z), py = Math.round((oy + F.h / 2 - gt.camY) * z);
+    g.fillStyle = '#ffffff'; g.fillRect(px - 2, py - 2, 4, 4);
+    g.strokeStyle = '#26282e'; g.lineWidth = 1;
+    g.strokeRect(px - 2.5, py - 2.5, 5, 5);
+  }
+  if(gt.showFlip && F.flip){
+    g.fillStyle = '#c95bd6'; g.font = 'bold 11px sans-serif';
+    g.fillText('⇄ Flip', dx + 2, dy - 4);
+  }
+  /* Hitbox / Hurtbox — วาดเฉพาะเมื่อโปรเจกต์มีข้อมูลจริง (ไม่สร้างค่าจำลอง) */
+  const boxes = gtDetectBoxes();
+  const drawBoxData = (data, color) => {
+    const arr = Array.isArray(data) ? data : [data];
+    for(const d of arr){
+      if(!d || typeof d !== 'object') continue;
+      if(!Number.isFinite(+d.x) || !Number.isFinite(+d.w)) continue;
+      const bw = +d.w, bh = Number.isFinite(+d.h) ? +d.h : +d.w;
+      g.strokeStyle = color; g.lineWidth = Math.max(1, z / 2);
+      g.strokeRect(Math.round((ox + (+d.x) - gt.camX) * z) + .5, Math.round((oy + (+d.y) - gt.camY) * z) + .5,
+        Math.round(bw * z), Math.round(bh * z));
+    }
+  };
+  if(gt.showHit && boxes.hitbox) drawBoxData(boxes.hitbox, '#2e9e5b');
+  if(gt.showHurt && boxes.hurtbox) drawBoxData(boxes.hurtbox, '#c95bd6');
+}
+function gtDetectBoxes(){
+  const res = { hitbox:null, hurtbox:null, where:'' };
+  const D = project.dirs.down;
+  const targets = [[project, 'โปรเจกต์'], [D, 'ทิศ down'], [D.frames[D._ci], 'เฟรมปัจจุบัน']];
+  for(const [obj, label] of targets){
+    if(!obj || typeof obj !== 'object') continue;
+    if(!res.hitbox && (obj.hitbox || obj.hitboxes)){ res.hitbox = obj.hitbox || obj.hitboxes; if(!res.where) res.where = label; }
+    if(!res.hurtbox && (obj.hurtbox || obj.hurtboxes)){ res.hurtbox = obj.hurtbox || obj.hurtboxes; if(!res.where) res.where = label; }
+  }
+  return res;
+}
+
+/* ---------- คีย์บอร์ด (capture phase — บัง hotkeys ของ Editor ขณะโหมดทดสอบเปิดอยู่) ---------- */
+const GT_KEYMAP = { w:'up', arrowup:'up', s:'down', arrowdown:'down', a:'left', arrowleft:'left',
+  d:'right', arrowright:'right', ' ':'attack' };
+function gtOnKeyDown(e){
+  if(!gt.open) return;
+  const t = e.target;
+  if(t && t.closest && t.closest('input,textarea,select')) return;   // พิมพ์ในช่องตั้งค่าได้ปกติ (การเคลื่อนที่หยุดเอง)
+  const k = e.key.toLowerCase();
+  if(k === 'escape'){ e.preventDefault(); e.stopPropagation(); gtCloseWin(); return; }
+  e.preventDefault(); e.stopPropagation();
+  if(gt.paused) return;
+  if(k === 'shift'){ gt.keys.run = true; return; }
+  const a = GT_KEYMAP[k];
+  if(!a) return;
+  if(a === 'attack'){ if(!e.repeat) gtPressAttack(); return; }
+  if(!gt.keys[a]){ gt.keys[a] = true; gtCTMCancel(true); }   // ใช้คีย์บอร์ดระหว่าง Click-to-Move = ยกเลิกเป้าหมายทันที
+}
+function gtOnKeyUp(e){
+  if(!gt.open) return;
+  const k = e.key.toLowerCase();
+  if(k === 'shift'){ gt.keys.run = false; return; }
+  const a = GT_KEYMAP[k];
+  if(!a) return;
+  e.preventDefault();
+  if(a === 'attack') return;
+  gt.keys[a] = false;
+}
+document.addEventListener('keydown', gtOnKeyDown, true);
+document.addEventListener('keyup', gtOnKeyUp, true);
+window.addEventListener('blur', gtClearKeys);
+document.addEventListener('visibilitychange', () => { if(document.hidden) gtClearKeys(); });
+
+/* ---------- ปุ่มควบคุมบนหน้าจอ: D-pad 8 ทิศ + วิ่ง + โจมตี (เมาส์ + Touch) ---------- */
+$$('#gtCtrl .gtbtn[data-gk]').forEach(el => {
+  const act = el.dataset.gk;
+  const pair = act === 'upLeft' ? ['up', 'left'] : act === 'upRight' ? ['up', 'right'] :
+    act === 'downLeft' ? ['down', 'left'] : act === 'downRight' ? ['down', 'right'] : null;
+  const dn = e => {
+    e.preventDefault();
+    try{ el.setPointerCapture(e.pointerId); }catch(err){}
+    el.classList.add('on');
+    if(gt.paused) return;
+    if(act === 'attack'){ gtPressAttack(); return; }
+    if(act === 'run'){ gt.keys.run = true; return; }
+    if(pair){
+      if(!gt.keys[pair[0]] && !gt.keys[pair[1]]) gtCTMCancel(true);
+      gt.keys[pair[0]] = true; gt.keys[pair[1]] = true;
+    } else {
+      if(!gt.keys[act]){ gt.keys[act] = true; gtCTMCancel(true); }
+    }
+  };
+  const up = e => {
+    e.preventDefault();
+    el.classList.remove('on');
+    if(act === 'attack') return;
+    if(act === 'run'){ gt.keys.run = false; return; }
+    if(pair){ gt.keys[pair[0]] = false; gt.keys[pair[1]] = false; }
+    else gt.keys[act] = false;
+  };
+  el.addEventListener('pointerdown', dn);
+  el.addEventListener('pointerup', up);
+  el.addEventListener('pointercancel', up);
+  el.addEventListener('lostpointercapture', up);
+});
+
+/* ---------- ฉาก: Click-to-Move / เลื่อนมุมมอง / วาง-ลบสิ่งกีดขวาง / ล้อเมาส์ซูม ---------- */
+function gtScenePoint(e){
+  const r = gtCv.getBoundingClientRect();
+  return { x:(e.clientX - r.left) / gt.zoom + gt.camX, y:(e.clientY - r.top) / gt.zoom + gt.camY };
+}
+function gtPaintObstacle(p){
+  const cx = Math.floor(p.x / GT_CELL) * GT_CELL, cy = Math.floor(p.y / GT_CELL) * GT_CELL;
+  const key = cx + ',' + cy;
+  if(gt.dragCell === key) return;
+  gt.dragCell = key;
+  if(cx < 0 || cy < 0 || cx + GT_CELL > gt.sceneW || cy + GT_CELL > gt.sceneH) return;
+  if(gt.obstacles.some(o => o.x === cx && o.y === cy)) return;
+  /* วางทับตัวละครไม่ได้ — กันผู้ใช้วางของทับตัวเองแล้วติดตาย */
+  if(gtRectsOverlap({ x:cx, y:cy, w:GT_CELL, h:GT_CELL }, gtBoxAt(gtMove.px, gtMove.py))){
+    gtNote('วางสิ่งกีดขวางทับตัวละครไม่ได้ (กันติดดิน) — เลื่อนตำแหน่งก่อนแล้วค่อยวาง');
+    return;
+  }
+  gt.obstacles.push({ x:cx, y:cy, w:GT_CELL, h:GT_CELL });
+  gtSceneDirty = true;
+}
+function gtEraseObstacle(p){
+  const cx = Math.floor(p.x / GT_CELL) * GT_CELL, cy = Math.floor(p.y / GT_CELL) * GT_CELL;
+  const key = cx + ',' + cy;
+  if(gt.dragCell === key) return;
+  gt.dragCell = key;
+  const before = gt.obstacles.length;
+  gt.obstacles = gt.obstacles.filter(o => !(o.x === cx && o.y === cy));
+  if(gt.obstacles.length !== before) gtSceneDirty = true;
+}
+gtCv.addEventListener('pointerdown', e => {
+  if(!gt.open) return;
+  try{ gtCv.setPointerCapture(e.pointerId); }catch(err){}
+  const p = gtScenePoint(e);
+  if(gt.tool === 'move'){
+    /* Click-to-Move: คลิกซ้าย/แตะบนพื้น = กำหนดเป้าหมาย (คลิกใหม่ระหว่างเดิน = เปลี่ยนเป้าหมาย) */
+    gtCTMSet(p.x, p.y);
+    const dx = gt.ctm.tx - gtMove.px, dy = gt.ctm.ty - gtMove.py;
+    if(Math.hypot(dx, dy) >= 1.5 && !ammGet('walkFront') && !ammGet('walkBack')){
+      gt.ctm.active = false;
+      gtWarnMissing('walkFront', 'Click-to-Move');
+    }
+  }
+  else if(gt.tool === 'add'){ gt.drag = 'add'; gtPaintObstacle(p); }
+  else if(gt.tool === 'del'){ gt.drag = 'del'; gtEraseObstacle(p); }
+  else { gt.drag = 'pan'; gt.panLast = { x:e.clientX, y:e.clientY }; }
+  e.preventDefault();
+});
+gtCv.addEventListener('pointermove', e => {
+  if(!gt.drag || !gt.open) return;
+  if(gt.drag === 'pan'){
+    gt.camX -= (e.clientX - gt.panLast.x) / gt.zoom;
+    gt.camY -= (e.clientY - gt.panLast.y) / gt.zoom;
+    gt.panLast = { x:e.clientX, y:e.clientY };
+  } else {
+    const p = gtScenePoint(e);
+    if(gt.drag === 'add') gtPaintObstacle(p); else gtEraseObstacle(p);
+  }
+  e.preventDefault();
+});
+['pointerup', 'pointercancel'].forEach(ev => gtCv.addEventListener(ev, () => { gt.drag = null; gt.dragCell = null; }));
+gtCv.addEventListener('wheel', e => {
+  if(!gt.open) return;
+  e.preventDefault();
+  const p = gtScenePoint(e);
+  const nz = clamp(gt.zoom + (e.deltaY < 0 ? 1 : -1), 1, 8);
+  if(nz === gt.zoom) return;
+  gt.camX = p.x - (p.x - gt.camX) * nz / gt.zoom;
+  gt.camY = p.y - (p.y - gt.camY) * nz / gt.zoom;
+  gt.zoom = nz;
+  $('#gtZoomRange').value = gt.zoom;
+  $('#gtZoomLbl').textContent = gt.zoom + '×';
+}, { passive:false });
+gtCv.addEventListener('contextmenu', e => e.preventDefault());
+
+/* ---------- เชื่อมแผงตั้งค่า / Debug / Animation ---------- */
+$('#gtScene').addEventListener('change', e => { gt.scene = e.target.value; gtSceneDirty = true; });
+$('#gtSceneApply').addEventListener('click', () => {
+  const w = clamp(parseInt($('#gtSceneW').value, 10) || gt.sceneW, 64, 2048);
+  const h = clamp(parseInt($('#gtSceneH').value, 10) || gt.sceneH, 64, 2048);
+  gt.sceneW = w; gt.sceneH = h; gtSceneDirty = true;
+  gtMove.px = clamp(gtMove.px, 0, w); gtMove.py = clamp(gtMove.py, 0, h);
+  gt.startX = clamp(gt.startX, 0, w); gt.startY = clamp(gt.startY, 0, h);
+  gtSyncAllUI();
+  toast('ตั้งขนาดพื้นที่ทดสอบ ' + w + '×' + h + ' px แล้ว', 'ok');
+});
+$('#gtZoomRange').addEventListener('input', e => {
+  gt.zoom = parseInt(e.target.value, 10) || 1;
+  $('#gtZoomLbl').textContent = gt.zoom + '×';
+});
+$('#gtShowGridChk').addEventListener('change', e => { gt.showGrid = e.target.checked; });
+$('#gtBorderChk').addEventListener('change', e => { gt.borderWalls = e.target.checked; gtSceneDirty = true; });
+$('#gtToolSel').addEventListener('change', e => { gt.tool = e.target.value; gtCv.dataset.tool = gt.tool; });
+$('#gtClearObsBtn').addEventListener('click', () => { gt.obstacles = []; gtSceneDirty = true; gtUpdatePanels(); toast('ลบสิ่งกีดขวางทั้งหมดแล้ว'); });
+$('#gtWalkSpd').addEventListener('change', e => { gt.walkSpeed = clamp(parseInt(e.target.value, 10) || 60, 1, 600); e.target.value = gt.walkSpeed; });
+$('#gtRunSpd').addEventListener('change', e => { gt.runSpeed = clamp(parseInt(e.target.value, 10) || 120, 1, 600); e.target.value = gt.runSpeed; });
+$('#gtStartX').addEventListener('change', e => { gt.startX = clamp(parseInt(e.target.value, 10) || 0, 0, gt.sceneW); });
+$('#gtStartY').addEventListener('change', e => { gt.startY = clamp(parseInt(e.target.value, 10) || 0, 0, gt.sceneH); });
+$('#gtSetStartHere').addEventListener('click', () => {
+  gt.startX = Math.round(gtMove.px); gt.startY = Math.round(gtMove.py);
+  gtSyncAllUI(); toast('ตั้งจุดเริ่มต้นของตัวละครที่ ' + gt.startX + ',' + gt.startY + ' แล้ว', 'ok');
+});
+$('#gtResetPos').addEventListener('click', () => {
+  gtMove.px = gt.startX; gtMove.py = gt.startY; gtCTMCancel(true); gtClearKeys(); gtCenterCam(); gtUpdatePanels();
+});
+$('#gtColW').addEventListener('change', e => { gt.colW = clamp(parseInt(e.target.value, 10) || gt.colW, 1, 512); e.target.value = gt.colW; });
+$('#gtColH').addEventListener('change', e => { gt.colH = clamp(parseInt(e.target.value, 10) || gt.colH, 1, 512); e.target.value = gt.colH; });
+$('#gtColOX').addEventListener('change', e => { gt.colOX = clamp(parseInt(e.target.value, 10) || 0, -256, 256); });
+$('#gtColOY').addEventListener('change', e => { gt.colOY = clamp(parseInt(e.target.value, 10) || 0, -256, 256); });
+$('#gtShowColChk').addEventListener('change', e => { gt.showCol = e.target.checked; });
+[['gtShowHit','showHit'], ['gtShowHurt','showHurt'], ['gtShowBounds','showBounds'],
+ ['gtShowPivot','showPivot'], ['gtShowOrigin','showOrigin'], ['gtShowCenter','showCenter'],
+ ['gtShowFlipChk','showFlip']]
+  .forEach(([id, prop]) => $('#' + id).addEventListener('change', e => { gt[prop] = e.target.checked; }));
+$('#gtLoopChk').addEventListener('change', e => {
+  gt.inspectLoopManual = e.target.checked;
+  if(gtAnim.type) gtAnim.loop = e.target.checked;
+});
+$('#gtInspectSel').addEventListener('change', e => {
+  gt.inspect = e.target.value;
+  if(gt.inspect){ gtAnim.key = ''; gtAnim.n = -1; }
+});
+$('#gtFpsProjChk').addEventListener('change', e => {
+  gt.fpsUseProject = e.target.checked;
+  $('#gtFpsOvr').disabled = gt.fpsUseProject;
+  gtUpdatePanels();
+});
+$('#gtFpsOvr').addEventListener('change', e => {
+  gt.fpsVal = clamp(parseInt(e.target.value, 10) || 8, 1, 60);
+  e.target.value = gt.fpsVal;
+});
+$('#gtAtkAgainChk').addEventListener('change', e => { gt.attackAgain = e.target.checked; });
+$('#gtPlayBtn').addEventListener('click', () => {
+  if(!gtAnim.frames.length){ toast('ยังไม่มี Animation ที่เล่นได้ — กำหนดท่าในแผง Animation Mapping ก่อน (Not Assigned จะไม่ถูกแทนที่เอง)', 'err'); return; }
+  if(gt.inspect){ gtAnim.playing = !gtAnim.playing; }
+  else { gtAnim.playing = !gtAnim.playing; if(gtAnim.playing) gtAnim.finished = false; }
+  gtUpdatePanels();
+});
+function gtStep(d){
+  if(!gtAnim.frames.length){ toast('ยังไม่มีเฟรมให้เลื่อน — กำหนด Animation ในแผง Animation Mapping ก่อน', 'err'); return; }
+  gtAnim.playing = false;
+  gtAnim.finished = false; gtAnim.acc = 0;
+  const n = gtAnim.frames.length;
+  gtAnim.pos = (gtAnim.pos + d + n) % n;
+  gtUpdatePanels();
+}
+$('#gtStepPrev').addEventListener('click', () => gtStep(-1));
+$('#gtStepNext').addEventListener('click', () => gtStep(1));
+
+/* ---------- สถานะ Mapping ใน Game Test (แสดงทุกท่า + เตือนท่าที่ยังไม่ได้กำหนด) ---------- */
+function ammRenderGTStatus(){
+  const box = $('#gtMapStatus');
+  if(!box || !project) return;
+  const miss = ammMissingList();
+  let html = '';
+  for(const grp of AMM_GROUPS){
+    html += '<div class="amm-group small">' + grp.th + '</div>';
+    for(const t of AMM_TYPES.filter(x => x.group === grp.id)){
+      const a = ammGet(t.id);
+      html += '<div class="gtmap-row' + (a ? ' ok' : ' none') + '"><b>' + t.label + '</b>' +
+        (a ? '<span>✓ ' + a.frames.length + ' เฟรม · ' + a.fps + ' FPS · ' + (a.loop ? 'Loop' : 'Once') + '</span>'
+           : '<span class="gtmap-none">Not Assigned — จะไม่เล่น จะแจ้งเตือนแทน</span>') + '</div>';
+    }
+  }
+  box.innerHTML = html;
+  $('#gtMapWarn').style.display = miss.length ? 'block' : 'none';
+  if(miss.length)
+    $('#gtMapWarn').innerHTML = '⚠ ยังไม่ได้กำหนด ' + miss.length + ' ท่า: <b>' + miss.map(t => AMM_TYPE_TH(t)).join(', ') + '</b><br>' +
+      'ท่าที่ยังไม่กำหนดจะไม่ถูกเล่น (ไม่เดาแทน) — กด "เปิดแผง Animation Mapping" เพื่อกำหนด';
+  /* เลือกดู Manual = เฉพาะท่าที่กำหนดแล้ว */
+  const sel = $('#gtInspectSel');
+  const cur = gt.inspect;
+  const assigned = AMM_TYPES.filter(t => ammGet(t.id));
+  sel.innerHTML = '<option value="">ตามเกม (อัตโนมัติจาก Mapping)</option>' +
+    assigned.map(t => '<option value="' + t.id + '">ดู ' + t.label + ' (' + ammGet(t.id).frames.length + ' เฟรม)</option>').join('');
+  sel.value = assigned.some(t => t.id === cur) ? cur : '';
+  gt.inspect = sel.value;
+}
+$('#gtBtnOpenAmm').addEventListener('click', () => {
+  gtPauseToEdit();
+  const sec = $('#secAnimMap');
+  if(sec){ sec.open = true; sec.scrollIntoView({ block:'start', behavior:'smooth' }); }
+  toast('พักเกมแล้ว — กำหนด Animation ในแผง "Animation Mapping" แล้วกด "🎮 กลับ Game Test" เพื่อทดสอบต่อ', 'ok');
+});
+
+/* ---------- ปุ่มส่วนหัว + Presets ---------- */
+$('#btnGameTest').addEventListener('click', () => {
+  if(gt.open && gtOverlayEl.classList.contains('open')) return;
+  if(gt.open) gtResume(); else gtOpenWin();
+});
+$('#gtPauseBtn').addEventListener('click', () => {
+  gt.paused = !gt.paused;
+  $('#gtPauseBtn').textContent = gt.paused ? '▶ เล่นต่อ' : '⏸ พักเกม';
+  gtClearKeys();
+  if(!gt.paused) gtLastTs = 0;
+  gtUpdatePanels();
+});
+$('#gtBtnFull').addEventListener('click', () => {
+  if(document.fullscreenElement){ document.exitFullscreen().catch(() => {}); }
+  else if(gtOverlayEl.requestFullscreen) gtOverlayEl.requestFullscreen().catch(() => toast('เบราว์เซอร์ไม่อนุญาตให้เข้าโหมดเต็มจอ', 'err'));
+});
+$('#gtBtnEdit').addEventListener('click', gtPauseToEdit);
+$('#gtBtnClose').addEventListener('click', gtCloseWin);
+$('#gtResumeChip').addEventListener('click', gtResume);
+$$('#gtPresets button').forEach(b => b.addEventListener('click', () => gtApplyPreset(b.dataset.preset)));
+function gtApplyPreset(name){
+  if(!gt.open) return;
+  if(name === 'idle'){
+    gtClearKeys(); gt.inspect = ''; gt.ctm.active = false; gt.showCol = false; gt.showBounds = false;
+    gtCenterCam();
+    const idMiss = ammGet('idleFront') || ammGet('idleBack');
+    gtNote(idMiss ? 'Idle Test — หยุดหลังเดินแล้วสังเกต Idle Front/Back ตามทิศล่าสุด' :
+      'Idle Test — หยุดหลังเดิน: Idle Front/Back ยังไม่ได้กำหนด (จะค้างเฟรมเดินล่าสุด + แจ้งเตือน)');
+    toast('Idle Test: เดินแล้วปล่อยปุ่ม — หยุดหลังเดินขึ้น = Idle Back · หลังเดินลง = Idle Front · หลังเดินซ้าย = Idle Front + Flip', 'ok');
+  } else if(name === 'walk'){
+    gt.tool = 'move'; gtCv.dataset.tool = 'move';
+    gt.scene = 'grass'; gtSceneDirty = true;
+    gtNote('Walk Test — เดิน 8 ทิศด้วย WASD/ลูกศร/ปุ่มบนจอ หรือ Click-to-Move (คลิกพื้น) · Down/Right = Walk Front · Up = Walk Back · ซ้าย = Flip');
+    toast('Walk Test: เดิน 8 ทิศ — ทิศที่ต้องใช้ Walk Back ยังไม่กำหนดจะแจ้งเตือนและบล็อกทิศนั้น (ไม่เดาแทน)', 'ok');
+  } else if(name === 'attack'){
+    gt.attackAgain = false;
+    gtNote('Attack Test — กด Space หรือปุ่ม 🗡 · หันขึ้น = Attack Back · หันลง/ข้าง = Attack Front · หันทางซ้าย = Flip อัตโนมัติ');
+    toast('Attack Test: ต้องกำหนด Attack Front และ Attack Back ในแผง Animation Mapping ก่อน (ยังไม่กำหนด = แจ้งเตือนเมื่อกด ไม่เอาท่าอื่นมาแทน)', 'ok');
+  } else if(name === 'collision'){
+    gt.showCol = true; gt.borderWalls = true;
+    gt.obstacles = [];
+    const bx = clamp(Math.round(gtMove.px / GT_CELL) * GT_CELL, 0, gt.sceneW - GT_CELL);
+    const by = clamp(Math.round(gtMove.py / GT_CELL) * GT_CELL + GT_CELL * 2, 0, gt.sceneH - GT_CELL);
+    for(let i = -2; i <= 2; i++){
+      const x = bx + i * GT_CELL;
+      if(x >= 0 && x + GT_CELL <= gt.sceneW) gt.obstacles.push({ x, y:by, w:GT_CELL, h:GT_CELL });
+    }
+    const vx = bx + GT_CELL * 4;
+    if(vx + GT_CELL <= gt.sceneW)
+      for(let j = 0; j < 3; j++){
+        const yy = by - GT_CELL + j * GT_CELL;
+        if(yy >= 0 && yy + GT_CELL <= gt.sceneH) gt.obstacles.push({ x:vx, y:yy, w:GT_CELL, h:GT_CELL });
+      }
+    gtSceneDirty = true;
+    gtNote('Collision Test — เดิน/คลิกเป้าหมายชนกำแพง ตัวละครจะเดินทะลุไม่ได้ (กรอบแดง = Collision Box)');
+    toast('Collision Test: วางกำแพงตัวอย่าง — Click-to-Move ที่ถึงเป้าไม่ได้จะหยุดพร้อมแจ้งเตือน', 'ok');
+  } else if(name === 'hitbox'){
+    gt.showBounds = true; gt.showPivot = true; gt.showOrigin = true; gt.showCenter = true;
+    const boxes = gtDetectBoxes();
+    gt.showHit = !!boxes.hitbox; gt.showHurt = !!boxes.hurtbox;
+    gtSyncAllUI();
+    toast(boxes.hitbox || boxes.hurtbox
+      ? 'Hitbox Test: แสดง Hitbox/Hurtbox จริงของโปรเจกต์ (พบที่ ' + boxes.where + ')'
+      : 'Hitbox Test: โปรเจกต์ยังไม่มีข้อมูล Hitbox/Hurtbox — แสดง Sprite Bounds/Pivot/Origin แทน (สถานะอยู่ในแผง Debug)', 'ok');
+  } else if(name === 'full'){
+    gt.showCol = true; gt.showBounds = true; gt.showPivot = true; gt.showCenter = true;
+    gt.showGrid = true; gt.borderWalls = true; gt.scene = 'grass'; gtSceneDirty = true;
+    gt.tool = 'move'; gtCv.dataset.tool = 'move';
+    const boxes = gtDetectBoxes();
+    gt.showHit = !!boxes.hitbox; gt.showHurt = !!boxes.hurtbox;
+    gtCenterCam();
+    toast('Full Test: เดิน 8 ทิศ + Click-to-Move + โจมตี + ชนกำแพง + Debug ครบ', 'ok');
+  }
+  gtSyncAllUI();
+}
+
+/* ---------- UI sync / ข้อมูล Animation Real-time ---------- */
+function gtSyncAllUI(){
+  $('#gtScene').value = gt.scene;
+  $('#gtSceneW').value = gt.sceneW;
+  $('#gtSceneH').value = gt.sceneH;
+  $('#gtZoomRange').value = gt.zoom;
+  $('#gtZoomLbl').textContent = gt.zoom + '×';
+  $('#gtShowGridChk').checked = gt.showGrid;
+  $('#gtBorderChk').checked = gt.borderWalls;
+  $('#gtToolSel').value = gt.tool;
+  gtCv.dataset.tool = gt.tool;
+  $('#gtWalkSpd').value = gt.walkSpeed;
+  $('#gtRunSpd').value = gt.runSpeed;
+  $('#gtStartX').value = gt.startX;
+  $('#gtStartY').value = gt.startY;
+  $('#gtColW').value = gt.colW;
+  $('#gtColH').value = gt.colH;
+  $('#gtColOX').value = gt.colOX;
+  $('#gtColOY').value = gt.colOY;
+  $('#gtShowColChk').checked = gt.showCol;
+  $('#gtShowHit').checked = gt.showHit;
+  $('#gtShowHurt').checked = gt.showHurt;
+  $('#gtShowBounds').checked = gt.showBounds;
+  $('#gtShowPivot').checked = gt.showPivot;
+  $('#gtShowOrigin').checked = gt.showOrigin;
+  $('#gtShowCenter').checked = gt.showCenter;
+  $('#gtShowFlipChk').checked = gt.showFlip;
+  $('#gtLoopChk').checked = gtAnim.loop;
+  $('#gtInspectSel').value = gt.inspect;
+  $('#gtFpsProjChk').checked = gt.fpsUseProject;
+  $('#gtFpsOvr').value = gt.fpsVal;
+  $('#gtFpsOvr').disabled = gt.fpsUseProject;
+  $('#gtAtkAgainChk').checked = gt.attackAgain;
+  $('#gtPauseBtn').textContent = gt.paused ? '▶ เล่นต่อ' : '⏸ พักเกม';
+  gtUpdatePanels();
+}
+function gtUpdatePanels(){
+  if(!project) return;
+  const x = Math.round(gtMove.px), y = Math.round(gtMove.py);
+  const miss = ammMissingList();
+  $('#gtHud').textContent = 'pos ' + x + ',' + y + ' · dir ' + gt.facing8 + (gtAnim.flip ? ' ⇄' : '') +
+    ' · ' + Math.round(gtFpsAvg) + ' FPS · zoom ' + gt.zoom + '×' + (gt.ctm.active ? ' · 🎯' : '');
+  const stName = { idle:'Idle', walk:'Walk', run:'Run', attack:'Attack' }[gtAct.state] || gtAct.state;
+  let html = (gt.paused ? '⏸ พักเกมอยู่ — กด "▶ เล่นต่อ" เพื่อทดสอบต่อ · ' : '') +
+    'สถานะ: <b>' + stName + '</b> · ทิศที่หัน: <b>' + gt.facing8 + '</b>' +
+    (gtAnim.flip ? ' <b style="color:#c95bd6">(Flip)</b>' : '') +
+    ' · ตำแหน่ง: <b>' + x + ', ' + y + '</b> · FPS จริง: ' + Math.round(gtFpsAvg);
+  if(gt.ctm.active) html += ' · เป้าหมาย Click-to-Move: <b>' + Math.round(gt.ctm.tx) + ', ' + Math.round(gt.ctm.ty) + '</b> (เหลือ ~' + Math.round(Math.hypot(gt.ctm.tx - gtMove.px, gt.ctm.ty - gtMove.py)) + 'px)';
+  const now = performance.now();
+  if(gt.noteMsg && now >= gt.noteUntil) gt.noteMsg = '';
+  if(gt.noteMsg) html += '<br>⚠ ' + escapeHtml(gt.noteMsg);
+  if(gt.blockedWalk) html += '<br>🚫 เดินทิศนี้ถูกบล็อก — ' + escapeHtml(AMM_TYPE_TH(gt.blockedWalk)) + ' ยังไม่ได้กำหนด (ไม่ใช้ท่าอื่นแทน)';
+  if(miss.length) html += '<br>ℹ Mapping ยังขาด ' + miss.length + ' ท่า (' + miss.map(t => AMM_TYPE_TH(t)).join(', ') + ')';
+  $('#gtStatus').innerHTML = html;
+  /* ข้อมูล Animation Real-time */
+  const s = gtAnim.srcId ? ammSource(gtAnim.srcId) : null;
+  const fpsTxt = gt.fpsUseProject
+    ? (gtAnim.fps + ' (จาก Mapping' + (s && s.kind === 'timeline' ? ' · เฟรม Timeline ตั้งเวลาเองได้' : '') + ')')
+    : (gtEffFps() + ' (Override เฉพาะทดสอบ)');
+  $('#gtInfoName').textContent = gtAnim.frames.length ? (gtAnim.name || AMM_TYPE_TH(gtAnim.type)) : (gtAnim.name || 'ไม่มี Animation — Mapping ยังไม่ได้กำหนด');
+  $('#gtInfoDir').textContent = gt.facing8 + (gtAnim.flip ? ' · Horizontal Flip' : ' · ปกติ') +
+    (gtAnim.type ? ' · ' + AMM_TYPE_TH(gtAnim.type) : '');
+  $('#gtInfoFps').textContent = fpsTxt;
+  $('#gtInfoFrame').textContent = gtAnim.frames.length
+    ? (gtAnim.pos + 1) + ' / ' + gtAnim.frames.length
+    : '—';
+  $('#gtInfoTotal').textContent = gtAnim.frames.length
+    ? gtAnim.frames.length + ' เฟรม (จากที่ผู้ใช้เลือกใน Mapping)'
+    : '0 เฟรม';
+  $('#gtInfoState').textContent = gt.paused ? 'พักเกม'
+    : gtAnim.finished ? 'จบแล้ว (เล่นครบรอบ — non-loop)'
+    : gtAnim.playing ? 'Play' : 'Pause / ค้างเฟรม';
+  $('#gtInfoSpeed').textContent = gtAnim.speed + '×' + (gtAnim.frames.length ? ' · ' + Math.round(1000 / Math.max(1, gt.fpsUseProject ? gtAnim.fps : gtEffFps())) + ' ms/เฟรม' : '');
+  $('#gtPlayBtn').textContent = gtAnim.playing ? '⏸ พัก' : '▶ เล่น';
+  $('#gtObsCount').textContent = 'สิ่งกีดขวาง: ' + gt.obstacles.length + ' ช่อง (' + GT_CELL + '×' + GT_CELL + ' px/ช่อง)';
+  const boxes = gtDetectBoxes();
+  $('#gtBoxStatus').innerHTML = (boxes.hitbox || boxes.hurtbox)
+    ? 'พบข้อมูลจริงในโปรเจกต์ (ที่ ' + escapeHtml(boxes.where) + '): ' +
+      (boxes.hitbox ? 'Hitbox = ' + escapeHtml(JSON.stringify(boxes.hitbox)) : 'ไม่มี Hitbox') + ' · ' +
+      (boxes.hurtbox ? 'Hurtbox = ' + escapeHtml(JSON.stringify(boxes.hurtbox)) : 'ไม่มี Hurtbox')
+    : 'ยังไม่ได้กำหนด Hitbox / Hurtbox ในโปรเจกต์ — ฟอร์แมตโปรเจกต์ปัจจุบัน (pacc-v1) ไม่มีข้อมูลส่วนนี้ ระบบจึงไม่สร้างค่าจำลองให้อัตโนมัติ · เมื่อโปรเจกต์มีฟิลด์ hitbox/hurtbox จะแสดงกรอบเขียว/ม่วงทันทีเมื่อเปิดตัวเลือก';
+}
+function gtCenterCam(){
+  const w = gtWrap.clientWidth, h = gtWrap.clientHeight;
+  if(w > 4) gt.camX = gtMove.px - w / gt.zoom / 2;
+  if(h > 4) gt.camY = gtMove.py - h / gt.zoom / 2;
+}
+
+/* ---------- ค่าเริ่มต้นต่อโปรเจกต์ (จากขนาด Canvas จริง) ---------- */
+function gtInitDefaults(force){
+  if(!force && gt.pid === project.id) return;
+  gt.pid = project.id;
+  gt.sceneW = clamp(Math.max(320, project.w * 8), 64, 2048);
+  gt.sceneH = clamp(Math.max(240, project.h * 6), 64, 2048);
+  gtMove.px = gt.startX = Math.round(gt.sceneW / 2);
+  gtMove.py = gt.startY = Math.round(gt.sceneH / 2);
+  gt.colW = project.w; gt.colH = project.h; gt.colOX = 0; gt.colOY = 0;
+  gt.zoom = project.h <= 32 ? 3 : 2;
+  gtAct.facing = 'down'; gtAct.state = 'idle';
+  gt.facing8 = 'down'; gt.lastMove = 'down';
+  gt.inspect = '';
+  gt.blockedWalk = '';
+  gt.ctm.active = false;
+  gtClearKeys();
+  gt.obstacles = [];
+  gt.camX = 0; gt.camY = 0;
+  gtSceneDirty = true;
+}
+
+/* ---------- เปิด/พัก/ปิด + เกมลูป (Delta Time) ---------- */
+function gtOpenWin(){
+  if(!project) return;
+  gtInitDefaults(false);
+  gt.open = true; gt.paused = false;
+  gtOverlayEl.classList.add('open');
+  $('#gtResumeChip').style.display = 'none';
+  $('#gtProjLabel').textContent = 'โปรเจกต์: ' + project.name + ' · Canvas ' + project.w + '×' + project.h +
+    ' px · อาชีพ: ' + ammClassLabel() + ' · Mapping: ' + (ammMissingList().length ?
+    (AMM_TYPES.length - ammMissingList().length) + '/' + AMM_TYPES.length + ' ท่า' : 'ครบ ' + AMM_TYPES.length + '/' + AMM_TYPES.length + ' ท่า');
+  gtAnim.key = ''; gtAnim.n = -1;
+  ammRenderGTStatus();
+  gtSyncAllUI();
+  gtCenterCam();
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  const miss = ammMissingList();
+  if(miss.length) toast('Game Test Mode: ยังไม่ได้กำหนด ' + miss.length + ' ท่า (' + miss.map(t => AMM_TYPE_TH(t)).join(', ') + ') — ท่าเหล่านั้นจะไม่เล่นและจะแจ้งเตือน ไม่มีการเดาแทน', 'err');
+  gtStartLoop();
+}
+function gtPauseToEdit(){
+  gt.paused = true;
+  gtOverlayEl.classList.remove('open');
+  $('#gtResumeChip').style.display = 'inline-flex';
+  gtStopLoop();
+  gtClearKeys();
+  toast('พัก Game Test — แก้ไขภาพ/กำหนด Animation Mapping ได้ตามปกติ กดปุ่ม "🎮 กลับ Game Test" เพื่อทดสอบต่อ (ข้อมูลอัปเดตอัตโนมัติ)', 'ok');
+}
+function gtResume(){
+  if(!gt.open) return;
+  gtInitDefaults(false);
+  gt.paused = false;
+  gtOverlayEl.classList.add('open');
+  $('#gtResumeChip').style.display = 'none';
+  gtClearKeys();
+  gtAnim.key = ''; gtAnim.n = -1;
+  ammRenderGTStatus();
+  gtSyncAllUI();
+  gtStartLoop();
+}
+function gtCloseWin(){
+  gt.open = false; gt.paused = false;
+  gtOverlayEl.classList.remove('open');
+  $('#gtResumeChip').style.display = 'none';
+  gtStopLoop();
+  gtClearKeys();
+  toast('ปิด Game Test Mode แล้ว — กลับสู่ Editor ตามปกติ (ข้อมูลโปรเจกต์ไม่ถูกแก้ไข)');
+}
+function gtLoop(ts){
+  if(!gt.open){ gtRaf = 0; return; }
+  const dt = gtLastTs ? Math.min(100, ts - gtLastTs) : 16.7;
+  gtLastTs = ts;
+  gtFpsAvg = gtFpsAvg ? (gtFpsAvg * 0.95 + (1000 / Math.max(1, dt)) * 0.05) : (1000 / Math.max(1, dt));
+  if(!gt.paused) gtUpdate(dt);
+  gtRender();
+  const now = performance.now();
+  if(now - gtPanelAt > 120){ gtPanelAt = now; gtUpdatePanels(); }
+  gtRaf = requestAnimationFrame(gtLoop);
+}
+function gtStartLoop(){
+  if(!gtRaf){ gtLastTs = 0; gtRaf = requestAnimationFrame(gtLoop); }
+}
+function gtStopLoop(){
+  if(gtRaf){ cancelAnimationFrame(gtRaf); gtRaf = 0; }
+}
 
 /* ---------- test hooks (used by automated checks) ---------- */
 window.PACC = {
@@ -5189,6 +7989,112 @@ window.PACC = {
   pickColor, pickColorFromRgb,
 };
 
+/* ---------- test hooks ของ Game Test Mode + Animation Mapping (ใช้โดยการตรวจสอบอัตโนมัติ) ---------- */
+window.PACC.crp = {
+  /* API สำหรับทดสอบอัตโนมัติ — พฤติกรรมเดียวกับการใช้เมาส์/แผงควบคุม */
+  tool: () => selectTool('crp'),
+  select: (x, y, w, h) => { if(crpFloat) crpDiscard(); state.selection = { x, y, w, h }; crpSync(); scheduleRender(); },
+  sel: () => state.selection ? { ...state.selection } : null,
+  extract: () => crpExtract(),
+  floating: () => !!crpFloat,
+  setDeg: d => crpSetDeg(d),
+  deg: () => crpFloat ? crpFloat.deg : null,
+  setPivot: (x, y) => crpSetPivot(x, y),
+  pivot: () => crpFloat ? { ...crpFloat.pivot } : null,
+  setOff: (x, y) => { if(crpFloat){ crpFloat.off = { x, y }; crpRebuild(); crpSync(); scheduleRender(); } },
+  off: () => crpFloat ? { ...crpFloat.off } : null,
+  info: () => crpFloat && crpRot ? { deg: crpFloat.deg, pivot: { ...crpFloat.pivot }, off: { ...crpFloat.off },
+    dest: { w: crpRot.w, h: crpRot.h, ox: crpRot.ox, oy: crpRot.oy }, clipped: crpRot.clipped,
+    placed: crpRot.placed, srcCount: crpRot.srcCount } : null,
+  apply: () => crpApply(),
+  cancel: () => crpCancelBtn(),
+  discard: () => { crpCancel(); },
+};
+/* ---------- แถบขวา: ช่วยการเลื่อน + สไลด์ (จอใหญ่) — เสริมจากระบบจอเล็กเดิม ---------- */
+(function(){
+  const rb = $('#rightbar');
+  if(!rb) return;
+  /* เปิดหัวข้อไหน (details) ก็เลื่อนตามให้เห็นเต็มหัวข้อนั้นทันที
+     — แก้อาการทำเฟรมแล้วเลื่อนลงไปไม่สุด/หาแผงไม่เจอ (block:'nearest' จะไม่ขยับเลยถ้ามองเห็นอยู่แล้ว) */
+  rb.addEventListener('toggle', e => {
+    if(e.target && e.target.tagName === 'DETAILS' && e.target.open){
+      requestAnimationFrame(() => {
+        try{ e.target.scrollIntoView({ block:'nearest', behavior:'smooth' }); }catch(err){}
+      });
+    }
+  }, true);   /* toggle ไม่ bubble — ใช้ capture ให้ครอบทุก <details> ในแถบขวา */
+})();
+
+window.PACC.gt = {
+  open:gtOpenWin, close:gtCloseWin, pauseToEdit:gtPauseToEdit, resume:gtResume,
+  isOpen:() => gt.open, isPaused:() => gt.paused,
+  state:() => ({
+    open:gt.open, paused:gt.paused, action:gtAct.state, facing:gt.facing8, flip:gtAnim.flip,
+    pos:{ x:Math.round(gtMove.px), y:Math.round(gtMove.py) },
+    anim:{ type:gtAnim.type, name:gtAnim.name, pos:gtAnim.pos, total:gtAnim.frames.length,
+      playing:gtAnim.playing, finished:!!gtAnim.finished, speed:gtAnim.speed, fps:gtAnim.fps },
+    keys:{ ...gt.keys }, zoom:gt.zoom, scene:gt.scene, sceneW:gt.sceneW, sceneH:gt.sceneH,
+    obstacles:gt.obstacles.length, tool:gt.tool,
+    col:{ w:gt.colW, h:gt.colH, ox:gt.colOX, oy:gt.colOY },
+    fps:{ useMapping:gt.fpsUseProject, override:gt.fpsVal },
+    fpsAvg:Math.round(gtFpsAvg),
+    ctm:{ active:gt.ctm.active, tx:Math.round(gt.ctm.tx), ty:Math.round(gt.ctm.ty) },
+    blockedWalk:gt.blockedWalk || '',
+    missing:ammMissingList(),
+    classId:project.classId || '',
+  }),
+  /* จำลองการกดปุ่มค้าง/ปล่อย — ทิศฐาน 4 ทิศ (รวมกันเป็นเฉียงอัตโนมัติ) + run/attack */
+  key:(a, down) => {
+    if(!gt.open) return false;
+    if(down){
+      if(a === 'attack'){ gtPressAttack(); return true; }
+      if(a === 'run'){ gt.keys.run = true; return true; }
+      if(gt.keys[a] === undefined) return false;
+      gt.keys[a] = true; gtCTMCancel(true);
+      return true;
+    }
+    if(a === 'run'){ gt.keys.run = false; return true; }
+    if(gt.keys[a] === undefined) return false;
+    gt.keys[a] = false;
+    return true;
+  },
+  pressAttack:gtPressAttack,
+  step:(d) => gtStep(d),
+  detectBoxes:gtDetectBoxes,
+  frameCanvas:gtFrameCanvas,
+  centerCam:gtCenterCam,
+  resetPos:() => { gtMove.px = gt.startX; gtMove.py = gt.startY; gtCTMCancel(true); },
+  /* Click-to-Move ผ่าน hooks */
+  setTarget:(x, y) => { gtCTMSet(+x, +y); },
+  cancelTarget:() => { gtCTMCancel(true); },
+  targetActive:() => gt.ctm.active,
+  /* Animation Mapping ผ่าน hooks */
+  mappingGet:(type) => ammGet(type),
+  mappingSet:(type, assignment) => { ammAssign(type, assignment); if(gt.open) gtRefreshMap(); },
+  mappingClear:(type) => { ammClear(type); if(gt.open) gtRefreshMap(); },
+  missingList:() => ammMissingList(),
+  warnNote:(msg) => gtNote(msg),
+  invalidate:() => { ammInvalidate(); if(gt.open) gtRefreshMap(); },
+  rev:() => gtRev,
+  ammRev:() => ammRev,
+  cacheSize:() => gtFrameCache.size,
+};
+window.PACC.amm = {
+  importDataURL:ammImportDataURL,
+  loadSheetFile:ammLoadSheetFile,
+  addTimeline:(dir) => ammAddTimelineSource(dir),
+  sources:() => ammEnsure().sources.map(s => ({ ...s })),
+  get:(type) => ammGet(type),
+  set:ammAssign,
+  clear:ammClear,
+  missing:() => ammMissingList(),
+  classId:() => ammCid(),
+  onClassChange:ammOnClassChange,
+  frameCanvas:(type, i) => { const a = ammGet(type); return a ? ammFrameCanvas(a, i) : null; },
+  renderPanel:ammRenderPanel,
+  openEditor:(type) => ammOpenEditor(type),
+};
+
 /* ---------- boot ---------- */
 async function boot(){
   buildToolbar();
@@ -5215,6 +8121,7 @@ async function boot(){
   }
   if(!restored) makeProject('ตัวละครใหม่', 32, 32, '');
   fitView();
+  ammRenderPanel();
   refreshAll();
   applyLang();
   saveProject(true);
